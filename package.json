@@ -1,0 +1,24 @@
+{
+  "name": "oo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+	"start": "concurrently \"cd backend && node app.js\" \"cd frontend && npm start\""
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yaya7263/dapprent.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yaya7263/dapprent/issues"
+  },
+  "homepage": "https://github.com/yaya7263/dapprent#readme",
+  "dependencies": {
+    "concurrently": "^4.1.0"
+  }
+}
