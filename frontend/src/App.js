@@ -46,18 +46,32 @@ class App extends Component {
 
 
   handleRentProperty = prop =>{
-    scFunctions.scRent(prop, this.state.company); 
+    scFunctions.scRent(prop, this.state.company);
+    console.log("Added transaction to smart Contract");  
+    //updateStatus(prop._id, 1)
   }
 
   handleUpdateProperty = () => {
     scFunctions.getRents(); 
+//db.inventory.find( { status: "D" } )
   }
+    
 
+/*
+  updateStatus = (id, status) => {
+    axios.post("http://localhost:3001/api/updateData", {
+      id: objIdToUpdate,
+      update: { message: updateToApply }
+    });
+  };
+  */
+
+//0 for avail, 1 for rented, 2 for processing
   figureOutStatus = id => {
     if (id == 0) {
       return "avail"
     }
-    else if (id == 1){
+    else if (id == 2){ 
       return "processing"
     }
     else 
@@ -65,9 +79,8 @@ class App extends Component {
   }
   handleCompanySubmit(event) {
     console.log("company submit")
-    console.log(event.target.value)
     event.preventDefault(); 
-    this.setState({company: "Hi" })
+    this.setState({company: event.target.elements.company.value })
   }
 
 
@@ -78,7 +91,7 @@ class App extends Component {
         <div style={{ padding: "10px" }}>
           <form onSubmit={this.handleCompanySubmit}>
             <label>
-              <input placeholder="put company name here" />
+              <input placeholder="put company name here" id="company"/>
             </label>
             <input type="submit" value="Submit" />
           </form>
@@ -108,7 +121,6 @@ class App extends Component {
                    <div className='row' style={{ padding: "10px" }}> {dat.price} </div>
                    <div className='row' style={{ padding: "10px" }}> {dat.start} </div>
                    <div className='row' style={{ padding: "10px" }}> {dat.end} </div>
-                   <div className='row' style={{ padding: "10px" }}> {dat._id} </div>
                    <button onClick={() => this.handleRentProperty(dat)}> Rent Property </button>
                   </div>
                 </li>

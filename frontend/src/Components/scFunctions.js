@@ -22,11 +22,20 @@ exports.scRent = (prop, company) => {
 
 exports.getRents = () => {
 	var transactions = HomeAway.getRecentRentals(0)
+	let status = transactions[0];
+	let location = transactions[1];
+	let company = transactions[2];
+	let price = transactions[3]; 
+	let start = transactions[4];
+	let end = transactions[5]; 
 
-	var myNum = transactions[3][2];
-	console.log(myNum.toNumber())
-
-	var props = transactions[1];
-	console.log(props)
+	for(let i = 0; i < transactions[0].length; i++){
+		console.log(status[i].toNumber());
+		console.log(web3.toAscii(location[i]));
+		console.log(web3.toAscii(company[i]));
+		console.log(price[i].toNumber());
+		console.log(start[i].toNumber());
+		console.log(end[i].toNumber());
+	}
    
 }
