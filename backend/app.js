@@ -18,7 +18,31 @@ app.use(cors({
 
 Property =require('./models/property');
 
-mongoose.connect('mongodb://localhost/Homeaway')
+mongoose.connect('mongodb://localhost/Home')
+
+
+var abc = function() {
+	console.log("geenrate")
+	for (i = 0 ; i < 20; i++) {
+		prop = {
+			status: 0,
+			location: "property1" + i.toString(),
+			rentee: "empty",
+			company: "empty",
+			price: 100+i,
+			start: 0,
+			end: 0
+		}
+
+		Property.create(prop, (err,Property) => {
+        if(err){
+            throw err;
+        }
+        res.json(Property)
+    })
+
+	}
+}
 
 
 app.get('/api/property', (req, res) => {
