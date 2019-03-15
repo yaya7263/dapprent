@@ -2,6 +2,9 @@
 import React, { Component } from "react";
 import axios from "axios";
 import './App.css';
+const Web3 = require('web3');
+const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
+web3.setProvider(new web3.providers.HttpProvider('http://localhost:8545'));
 
 const scFunctions = require("./Components/scFunctions"); 
 class App extends Component {
@@ -25,7 +28,7 @@ class App extends Component {
     console.log("Component did mount")
     this.getDataFromDb();
     if (!this.state.intervalIsSet) {
-      let interval = setInterval(this.getDataFromDb, 1000);
+      let interval = setInterval(this.getDataFromDb, 99100000);
       this.setState({ intervalIsSet: interval });
     }
   }
@@ -43,16 +46,55 @@ class App extends Component {
       .then(property => property.json())
       .then(res => this.setState({ data: res.data }));
   };
+  getDataBC = () => {
+    var rentals = scFunctions.getRents();
+    console.log(web3.toAscii(rentals[1][0]));
 
+
+    for(let i = 0; i < rentals[0].length; i++){
+      let currentProp = {
+        status: rentals[0][i].toNumber(),
+        location: web3.toUtf8(rentals[1][i]).replace(/\s+/g,''),
+        company: web3.toUtf8(rentals[2][i]).replace(/\s+/g,''),
+        price: rentals[3][i].toNumber(),
+        start: rentals[4][i].toNumber(),
+        end: rentals[5][i].toNumber(),
+        help: "haha"
+      }
+      currentProp.price = 1000; 
+      console.log(currentProp)
+      this.updateDB(currentProp);
+    }
+    this.getDataFromDb(); 
+    /*
+    for(let i = 0; i < rentals[0].length(); i++){
+      console.log(rentals.status[i].toNumber());
+      console.log(web3.toAscii(rentals.location[i]));
+      console.log(web3.toAscii(rentals.company[i]));
+      console.log(rentals.price[i].toNumber());
+      console.log(rentals.start[i].toNumber());
+      console.log(rentals.end[i].toNumber());
+    }
+    */
+  };
+
+
+  updateDB = (updateToApply) => {
+    axios.post("http://localhost:3001/api/updateData", {
+      update: updateToApply
+    });
+  };
 
   handleRentProperty = prop =>{
     scFunctions.scRent(prop, this.state.company);
-    console.log("Added transaction to smart Contract");  
-    //updateStatus(prop._id, 1)
+    console.log("Added transaction to smart Contract");
+    prop.status = 2; 
+    this.updateDB(prop); 
   }
 
+
   handleUpdateProperty = () => {
-    scFunctions.getRents(); 
+    this.getDataBC(); 
 //db.inventory.find( { status: "D" } )
   }
     
@@ -107,6 +149,7 @@ class App extends Component {
             Update Properties 
           </button>
         </div> 
+
 
         <ul>
           {data.length <= 0

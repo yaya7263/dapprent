@@ -193,7 +193,7 @@ var smartContractSetUp = function(web3) {
     }
 ]);
 
-    var HomeAway = HomeAwayContract.at('0x27bb410c75c90b7c973bb764a16499849b365865');       // Actual contract address
+    var HomeAway = HomeAwayContract.at('0xed2c8dbca6905cc60333ac08f0479f038f3c368b');       // Actual contract address
     console.log("Successfully connected to Smart Contract!")
 
     return HomeAway;

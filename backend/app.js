@@ -18,7 +18,7 @@ app.use(cors({
 
 Property =require('./models/property');
 
-mongoose.connect('mongodb://localhost/Home')
+mongoose.connect('mongodb://localhost/Home', { useNewUrlParser: true })
 
 
 var abc = function() {
@@ -26,7 +26,7 @@ var abc = function() {
 	for (i = 0 ; i < 20; i++) {
 		prop = {
 			status: 0,
-			location: "property1" + i.toString(),
+			location: "HOUSE" + i.toString(),
 			rentee: "empty",
 			company: "empty",
 			price: 100+i,
@@ -34,11 +34,10 @@ var abc = function() {
 			end: 0
 		}
 
-		Property.create(prop, (err,Property) => {
+		Property.create(prop, (err,Propertyz) => {
         if(err){
             throw err;
         }
-        res.json(Property)
     })
 
 	}
@@ -64,16 +63,19 @@ app.post('/api/property', (req, res) => {
     })
 })
 
-app.put('/api/property/:_id', (req, res) => {
-	var id = req.params._id;
-	var Property = req.body;
-	Property.findOneAndUpdate(id, Property, {}, (err, Property) => {
-		if(err){
-			throw err;
-		}
-		res.json(Property);
+app.post('/api/updateData', (req, res) => {
+	console.log(req.body.update.location)
+	var id = req.body.update._id;
+
+	Property.findOneAndUpdate({ location: req.body.update.location }, req.body.update, err => {
+		if (err) return res.json({ success: false, error: err });
+		return res.json({ success: true });
 	});
-});
+	
+
+    
+	}
+)
 
 
 app.listen(3001)

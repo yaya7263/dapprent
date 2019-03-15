@@ -29,6 +29,8 @@ exports.getRents = () => {
 	let start = transactions[4];
 	let end = transactions[5]; 
 
+	return [status, location, company, price, start, end]
+ /*
 	for(let i = 0; i < transactions[0].length; i++){
 		console.log(status[i].toNumber());
 		console.log(web3.toAscii(location[i]));
@@ -37,5 +39,5 @@ exports.getRents = () => {
 		console.log(start[i].toNumber());
 		console.log(end[i].toNumber());
 	}
-   
+   */
 }
