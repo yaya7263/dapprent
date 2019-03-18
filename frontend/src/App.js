@@ -2,9 +2,15 @@
 import React, { Component } from "react";
 import axios from "axios";
 import './App.css';
+import '../node_modules/jquery/dist/jquery.min.js'
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../node_modules/bootstrap/dist/js/bootstrap.min.js';
+
+
 const Web3 = require('web3');
 const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
 web3.setProvider(new web3.providers.HttpProvider('http://localhost:8545'));
+
 
 const scFunctions = require("./Components/scFunctions"); 
 class App extends Component {
@@ -150,27 +156,41 @@ class App extends Component {
           </button>
         </div> 
 
+      <div class="container"> 
 
-        <ul>
+        <table class="table table-striped table-hover table-condensed">
+          <tr>
+            <th> Status </th> 
+            <th> Location </th>
+            <th> Rentee </th> 
+            <th> Company </th>
+            <th> Price </th> 
+            <th> Start </th>
+            <th> End </th> 
+            <th> Rent Property </th> 
+          </tr>
           {data.length <= 0
             ? "No Properties..."
             : data.map(dat => (
-                <li key={data.location}>
-                  <div className='rows' >
-                   <div className='row' style={{ padding: "10px" }}> {this.figureOutStatus(dat.status)} </div>
-                   <div className='row' style={{ padding: "10px" }}> {dat.location} </div>
-                   <div className='row' style={{ padding: "10px" }}> {dat.rentee} </div>
-                   <div className='row' style={{ padding: "10px" }}> {dat.company} </div>
-                   <div className='row' style={{ padding: "10px" }}> {dat.price} </div>
-                   <div className='row' style={{ padding: "10px" }}> {dat.start} </div>
-                   <div className='row' style={{ padding: "10px" }}> {dat.end} </div>
-                   <button onClick={() => this.handleRentProperty(dat)}> Rent Property </button>
-                  </div>
-                </li>
+                <tr>
+                   <td> {this.figureOutStatus(dat.status)} </td>
+                   <td> {dat.location} </td>
+                   <td> {dat.rentee} </td>
+                   <td> {dat.company} </td>
+                   <td> {dat.price} </td>
+                   <td> {dat.start} </td>
+                   <td> {dat.end} </td>
+                   <td> <button onClick={() => this.handleRentProperty(dat)}> Rent Property </button> </td> 
+                </tr>
               ))}
-        </ul>
+        </table> 
+      </div> 
+
+
+
 
       </div>
+
     );
   }
 }
