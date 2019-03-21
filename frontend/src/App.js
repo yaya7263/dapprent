@@ -5,13 +5,17 @@ import './App.css';
 import '../node_modules/jquery/dist/jquery.min.js'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import DatePicker from "react-datepicker";
+import { MonToNum, MonToStr } from './Components/monthConvert.js'
 import "react-datepicker/dist/react-datepicker.css";
-import { Modal, Alert, Row, Label, Col, Panel, Form, Grid, Container, Image,  Button, ButtonToolbar, Table } from 'react-bootstrap/dist/react-bootstrap.js'
+import { Jumbotron, Modal, Alert, Row, Label, Col, Panel, Form, Grid, Container, Image,  Button, ButtonToolbar, Table } from 'react-bootstrap/dist/react-bootstrap.js'
 
 const Web3 = require('web3');
 const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
 web3.setProvider(new web3.providers.HttpProvider('http://localhost:8545'));
 const scFunctions = require("./Components/scFunctions"); 
+var moment = require('moment');
+
+
 
 class App extends Component {
   constructor(props) {
@@ -26,18 +30,26 @@ class App extends Component {
       idToDelete: null,
       idToUpdate: null,
       objectToUpdate: null,
-      rentProperty: "hello",
+      rentProperty: "DongFang",
       startDate: new Date(),
-      endDate: new Date()
+      endDate: new Date(),
+      firstName: "Ludwig",
+      lastName: "Wittgenstein"
     };
     this.handleCompanySubmit = this.handleCompanySubmit.bind(this);
 
   }
 
   handleRentSubmit = event => {
-    console.log("hello");
     event.preventDefault(); 
-    console.log("hello");
+    this.state.rentProperty.rentee = this.state.firstName + this.state.lastName
+    console.log(this.state.rentProperty.rentee)
+    scFunctions.scRent(this.state.rentProperty, this.state.company);
+    console.log("Added transaction to smart Contract");
+    this.state.rentProperty.status = 2; 
+    this.updateDB(this.state.rentProperty); 
+
+
   }
 
 
@@ -62,7 +74,8 @@ class App extends Component {
   getDataFromDb = () => {
     fetch("http://localhost:3001/api/property")
       .then(property => property.json())
-      .then(res => this.setState({ data: res.data }));
+      .then(res => this.setState({ data: res.data }))
+      .then(this.setState(this.state))
   };
   getDataBC = () => {
     var rentals = scFunctions.getRents();
@@ -79,11 +92,11 @@ class App extends Component {
         end: rentals[5][i].toNumber(),
         help: "haha"
       }
-      currentProp.price = 1000; 
       console.log(currentProp)
       this.updateDB(currentProp);
     }
     this.getDataFromDb(); 
+    this.setState(this.state);
   };
 
 
@@ -100,9 +113,11 @@ class App extends Component {
     prop.status = 2; 
     this.updateDB(prop); 
 */
+
+// this is gonna be handle rent property MODAL show, before submission. 
   handleRentProperty = prop =>{
     this.setState({show: true}); 
-    this.setState({rentProperty: prop.location })
+    this.setState({rentProperty: prop })
 
   }
 
@@ -110,6 +125,7 @@ class App extends Component {
 
   handleUpdateProperty = () => {
     this.getDataBC(); 
+    this.setState(this.state);
 //db.inventory.find( { status: "D" } )
   }
     
@@ -138,44 +154,89 @@ class App extends Component {
     this.setState({
       startDate: date
     });
+    let datez = moment(this.state.startDate).format('MMMDDYYYY');
+    datez = parseInt(MonToNum(datez)) 
+    this.state.rentProperty.start = datez
   }
 
   handleEndDateChange = date => {
     this.setState({
-      EndDate: date
+      endDate: date
     });
+    let datez = moment(this.state.startDate).format('MMMDDYYYY');
+    datez = parseInt(MonToNum(datez)) 
+    this.state.rentProperty.end = datez
+
   }
 
-  showProperty = prop => {
-    return(
-      <h1> {prop.location} </h1>
-      )
+  renderStatusButton = property => {
+    if (property.status == 1){
+      return <Button variant="danger"> Unavailable </Button>
+    }
+    else if (property.status == 2){
+      return <Button variant="primary"> Processing </Button>
+    }
+    return <Button variant="success" onClick={()=>this.handleRentProperty(property)}> Rent Property </Button>
+  }
+  renderProperties = data => {
+    var properties = []
+    var propRow = []
+    data.forEach((property,index) => {
+      propRow.push(<Col xs={{ size:3, offset: .5}}> 
+        <Jumbotron>
+          <Image src={require("./images/1.jpg")} fluid rounded />
+          <b> {property.location} </b> 
+          <h1> Price: {property.price} </h1> 
+          <div> 
+          {this.renderStatusButton(property)}
+          </div>
+        </Jumbotron> 
+      </Col>)
+      if((index+1)%3 == 0){ // if first in the row
+        properties.push(<Row>{ propRow }</Row>)
+        propRow = []
+      }
+
+    })
+    return (
+      <Container>
+        {properties}
+      </Container> 
+    )
   }
 
+  handleFirstName = e => {
+    this.setState({ firstName: e.target.value })
+  }
+
+  handleLastName = e => {
+    this.setState({ lastName: e.target.value })
+  }
   showModal = () => {
     return (
         <Modal style={{ top: '30%'}} show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton style={{backgroundImage: 'url(https://www.pictorem.com/collection/900_1994202HighRes.jpg)'}}>
             <Container >
-                  {this.state.rentProperty} 
+                  {this.state.rentProperty.location} 
             </Container> 
           </Modal.Header>
           <Modal.Body>
-              <Form>
+              <Form onSubmit = {this.handleRentSubmit} >
                    <Row style={{ paddingBottom:"10px" }}> 
                     <Col> 
                       <b> First Name </b> 
-                      <Form.Control style={{ width:"178px" }} type="text" />
+                      <Form.Control style={{ width:"178px" }} type="text" onChange={this.handleFirstName} />
                     </Col>
                     <Col>
                       <b> Last Name </b> 
-                      <Form.Control style={{ width:"178px" }} type="text"  />
+                      <Form.Control style={{ width:"178px" }} type="text" onChange={this.handleLastName} />
                     </Col> 
                   </Row>
                   <Row> 
                     <Col style={{ justifyContent: 'center'}}> 
                       <b> Start Date </b> 
                       <DatePicker
+                        dateFormat="MMMM d, yyyy"
                         selected={this.state.startDate}
                         onChange={this.handleStartDateChange}
                       />
@@ -183,6 +244,7 @@ class App extends Component {
                     <Col style={{ justifyContent: 'center'}}>  
                       <b> End Date </b> 
                       <DatePicker
+                        dateFormat="MMMM d, yyyy"
                         selected={this.state.endDate}
                         onChange={this.handleEndDateChange}
                       />
@@ -190,19 +252,12 @@ class App extends Component {
                   </Row> 
                   <Row>
                     <Col>  
-                      {this.state.rentProperty}
+                      {this.state.rentProperty.location}
                     </Col> 
                   </Row>
+                  <input type="submit" value="BookAway" />
               </Form> 
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleClose}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={this.handleClose}>
-              Save Changes
-            </Button>
-          </Modal.Footer>
         </Modal>)
   }
 
@@ -232,33 +287,9 @@ class App extends Component {
           </button>
         </div> 
 
-      <Container> 
-        <Table striped hover>
-          <thead> 
-            <tr>
-              <th> Status </th> 
-              <th> Location </th>
-              <th> Rentee </th> 
-              <th> Company </th>
-              <th> Price </th> 
-              <th> Start </th>
-              <th> End </th> 
-              <th> Rent Property </th> 
-            </tr>
-          </thead> 
-          <tbody> 
-            {data.length <= 0
-              ? "No Properties... Connected To Database?"
-              : data.map((dat,index) => (
-              <tr>
-                {this.showProperty(dat)}
-                {index}
-              </tr> 
-              ))}
-            </tbody> 
-        </Table> 
 
-      </Container> 
+        {this.renderProperties(data)} 
+
       <rentModal />; 
 
       </div>

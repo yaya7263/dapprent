@@ -7,6 +7,7 @@
     "bootstrap": "^4.3.1",
     "ethereumjs-testrpc": "^6.0.3",
     "jquery": "^3.3.1",
+    "moment": "^2.24.0",
     "popper.js": "^1.14.7",
     "react": "^16.8.3",
     "react-bootstrap": "^1.0.0-beta.5",
