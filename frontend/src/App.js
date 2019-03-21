@@ -34,6 +34,7 @@ class App extends Component {
       startDate: new Date(),
       endDate: new Date(),
       firstName: "Ludwig",
+      showConflict: false,
       lastName: "Wittgenstein"
     };
     this.handleCompanySubmit = this.handleCompanySubmit.bind(this);
@@ -75,8 +76,41 @@ class App extends Component {
     fetch("http://localhost:3001/api/property")
       .then(property => property.json())
       .then(res => this.setState({ data: res.data }))
-      .then(this.setState(this.state))
+      .then(this.compareData)
+
   };
+
+  compareData = () => {
+    this.setState(this.state);
+    console.log("hello")
+    this.setState({showConflict: true})
+    console.log(this.state.showConflict)
+  }
+
+  handleConflictClose = () => {
+    this.setState({showConflict: false})
+  }
+
+  showConflictModal = () => {
+    console.log("conflictmodalzz")
+    return (
+      <Modal style={{ top: '30%'}} show={this.state.showConflict} onHide={this.handleConflictClose} >
+      <Modal.Dialog>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal title</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <p>Modal body text goes here.</p>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="secondary">Close</Button>
+          <Button variant="primary">Save changes</Button>
+        </Modal.Footer>
+      </Modal.Dialog>
+      </Modal> )
+  }
   getDataBC = () => {
     var rentals = scFunctions.getRents();
     console.log(web3.toAscii(rentals[1][0]));
@@ -96,7 +130,7 @@ class App extends Component {
       this.updateDB(currentProp);
     }
     this.getDataFromDb(); 
-    this.setState(this.state);
+
   };
 
 
@@ -125,7 +159,6 @@ class App extends Component {
 
   handleUpdateProperty = () => {
     this.getDataBC(); 
-    this.setState(this.state);
 //db.inventory.find( { status: "D" } )
   }
     
@@ -267,6 +300,7 @@ class App extends Component {
     return (
       <div>
         {this.showModal()} 
+        {this.showConflictModal()} 
         <div style={{ padding: "10px" }}>
           <form onSubmit={this.handleCompanySubmit}>
             <label>
