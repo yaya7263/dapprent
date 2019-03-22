@@ -2,7 +2,7 @@ import Web3 from 'web3';
 
 var web3 = new Web3(window.web3.currentProvider);
 
-const address = '0x52741cc51640d52d5b801e6e1fd5094c996f7ea5';
+const address = '0x0f9384a3a7bc9c6a33ac32aa837b83765aa774a6';
 
 const abi =[
 	{
@@ -212,7 +212,7 @@ const scRent = (prop, company) => {
 const getRents = () => {
 	return new Promise((resolve, reject) => {
 		contractInstance.getRecentRentals(0, (err, transactions) => {
-
+			//  let ones = new Array(transactions).fill(0);
 			  let status = transactions[0];
 		      let location = transactions[1];
 			  let company = transactions[2];

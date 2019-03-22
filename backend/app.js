@@ -49,8 +49,7 @@ var abc = function() {
 }
 
 //hello :)
-//abc()
-
+//
 app.get('/api/property', (req, res) => {
 	Property.find((err, Propertys) => {
 		if(err){
