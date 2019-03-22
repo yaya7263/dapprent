@@ -18,20 +18,24 @@ app.use(cors({
 
 Property =require('./models/property');
 
-mongoose.connect('mongodb://localhost/Home', { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost/Database', { useNewUrlParser: true })
+
+var HouseArray = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]
+var prices = [499, 199, 75, 143, 324, 659, 793, 458,834,3880]
 
 
 var abc = function() {
 	console.log("geenrate")
-	for (i = 0 ; i < 20; i++) {
+	for (i = 0 ; i < 9; i++) {
 		prop = {
 			status: 0,
-			location: "HOUSE" + i.toString(),
+			location: HouseArray[i],
 			rentee: "empty",
 			company: "empty",
-			price: 100+i,
+			price: prices[i],
 			start: 0,
-			end: 0
+			end: 0,
+			image: "./images/" + i.toString() + ".jpg"
 		}
 
 		Property.create(prop, (err,Propertyz) => {
@@ -43,6 +47,7 @@ var abc = function() {
 	}
 }
 
+//abc()
 
 app.get('/api/property', (req, res) => {
 	Property.find((err, Propertys) => {

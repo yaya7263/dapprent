@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import './App.css';
-import '../node_modules/jquery/dist/jquery.min.js'
+//import '../node_modules/jquery/dist/jquery.min.js'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import DatePicker from "react-datepicker";
 import { MonToNum, MonToStr } from './Components/monthConvert.js'
@@ -15,7 +15,7 @@ web3.setProvider(new web3.providers.HttpProvider('http://localhost:8545'));
 const scFunctions = require("./Components/scFunctions"); 
 var moment = require('moment');
 
-
+const pathToImages = require.context('', true);
 
 class App extends Component {
   constructor(props) {
@@ -217,7 +217,9 @@ class App extends Component {
     data.forEach((property,index) => {
       propRow.push(<Col xs={{ size:3, offset: .5}}> 
         <Jumbotron>
-          <Image src={require("./images/1.jpg")} fluid rounded />
+          {console.log(property.image)}
+          {console.log(typeof property.image)}
+          <Image src={pathToImages(property.image)} fluid rounded />
           <b> {property.location} </b> 
           <h1> Price: {property.price} </h1> 
           <div> 

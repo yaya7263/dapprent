@@ -22,7 +22,10 @@ var propertySchema = mongoose.Schema({
     },
     end:{
         type:Number
+    },
+    image:{
+        type:String
     }
 })
 
-const Property = module.exports = mongoose.model("Prop", propertySchema);
+const Property = module.exports = mongoose.model("Property", propertySchema);
