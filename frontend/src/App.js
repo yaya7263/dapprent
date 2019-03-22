@@ -197,7 +197,7 @@ class App extends Component {
 
   renderStatusButton = property => {
     if (property.status == 1){
-      return <Button variant="danger"> Unavailable rented By Company {property.company} </Button>
+      return <Button variant="danger"> Unavailable rented By Company {property.company} until {property.end} </Button>
     }
     else if (property.status == 2){
       return <Button variant="primary" onClick={()=>this.handleRentProperty(property)}> Processing by Rentee {property.rentee}</Button>
@@ -209,8 +209,20 @@ class App extends Component {
     var propRow = []
     data.forEach((property,index) => {
       propRow.push(<Col xs={{ size:3, offset: .5}}> 
-        <Jumbotron>
-          <Image src={pathToImages(property.image)} fluid rounded />
+        <Jumbotron style = {{ 
+          borderColor: "grey",
+          borderStyle: 'solid',
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          borderBottomRightRadius: 20,
+          borderBottomLeftRadius: 20}}>
+          <Image style= {{
+                borderColor: "lightgrey",
+                borderStyle: 'solid',
+                width: 300,
+                height: 250,
+                overflow: "hidden"}}
+            src={pathToImages(property.image)} fluid rounded />
           <b> {property.location} </b> 
           <h1> Price: {property.price} </h1> 
           <div> 
