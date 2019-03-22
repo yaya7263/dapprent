@@ -1,27 +1,230 @@
-const Web3 = require('web3');
+import Web3 from 'web3';
 
-const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
+var web3 = new Web3(window.web3.currentProvider);
 
+const address = '0x52741cc51640d52d5b801e6e1fd5094c996f7ea5';
 
-web3.setProvider(new web3.providers.HttpProvider('http://localhost:8545'));
+const abi =[
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_location",
+				"type": "bytes32"
+			}
+		],
+		"name": "deleteRental",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "deleteRentals",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_location",
+				"type": "bytes32"
+			},
+			{
+				"name": "_rentee",
+				"type": "bytes32"
+			},
+			{
+				"name": "_price",
+				"type": "uint256"
+			},
+			{
+				"name": "_start",
+				"type": "uint256"
+			},
+			{
+				"name": "_end",
+				"type": "uint256"
+			},
+			{
+				"name": "_company",
+				"type": "bytes32"
+			}
+		],
+		"name": "rentProperty",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "transaction",
+				"type": "bool"
+			}
+		],
+		"name": "transactionResult",
+		"type": "event"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "getRecentRentals",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256[]"
+			},
+			{
+				"name": "",
+				"type": "bytes32[]"
+			},
+			{
+				"name": "",
+				"type": "bytes32[]"
+			},
+			{
+				"name": "",
+				"type": "uint256[]"
+			},
+			{
+				"name": "",
+				"type": "uint256[]"
+			},
+			{
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"name": "indexes",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "rentals",
+		"outputs": [
+			{
+				"name": "status",
+				"type": "uint256"
+			},
+			{
+				"name": "location",
+				"type": "bytes32"
+			},
+			{
+				"name": "rentee",
+				"type": "bytes32"
+			},
+			{
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"name": "start",
+				"type": "uint256"
+			},
+			{
+				"name": "end",
+				"type": "uint256"
+			},
+			{
+				"name": "company",
+				"type": "bytes32"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "transactions",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
 
+const myContract = window.web3.eth.contract(abi)
+var contractInstance = myContract.at(address)
 
 // Connect to smart contract
-const contract = require('./smartContract.js');
-var HomeAway = contract.smartContractSetUp(web3);
 
-var exports = module.exports = {};
-
-
-exports.scRent = (prop, company) => { 
-	HomeAway.rentProperty(
+const scRent = (prop, company) => { 
+	contractInstance.rentProperty(
 		web3.fromAscii(prop.location), "0x79616e67", prop.price, prop.start, prop.end, web3.fromAscii(company),
-		{from: web3.eth.accounts[0], gas: 3000000, value: 100}, function(err, res){});
+		{from: window.web3.eth.accounts[0], gas: 3000000, value: 100}, function(err, res){});
 }
 
 
-exports.getRents = () => {
-	var transactions = HomeAway.getRecentRentals(0)
+const getRents = () => {
+	return new Promise((resolve, reject) => {
+		contractInstance.getRecentRentals(0, (err, transactions) => {
+
+			  let status = transactions[0];
+		      let location = transactions[1];
+			  let company = transactions[2];
+		      let price = transactions[3]; 
+			  let start = transactions[4];
+			  let end = transactions[5];
+			  resolve([status, location, company, price, start, end]); 
+		})
+	})
+};
+
+	/*
 	let status = transactions[0];
 	let location = transactions[1];
 	let company = transactions[2];
@@ -30,6 +233,7 @@ exports.getRents = () => {
 	let end = transactions[5]; 
 
 	return [status, location, company, price, start, end]
+	*/
  /*
 	for(let i = 0; i < transactions[0].length; i++){
 		console.log(status[i].toNumber());
@@ -40,4 +244,6 @@ exports.getRents = () => {
 		console.log(end[i].toNumber());
 	}
    */
-}
+
+
+export { scRent, getRents }

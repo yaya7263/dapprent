@@ -103,27 +103,30 @@ class App extends Component {
       </Modal.Dialog>
       </Modal> )
   }
+
+  getRentals = async () => {
+    return await scFunctions.getRents();
+  } 
   getDataBC = () => {
-    var rentals = scFunctions.getRents();
-
-    //iterate backwards
-    var lastIndex = rentals[0].length - 1
-    for(let i = 0; i < rentals[0].length; i++){
-      let currentProp = {
-        status: rentals[0][lastIndex - i].toNumber(),
-        location: web3.toUtf8(rentals[1][lastIndex- i]).replace(/\s+/g,''),
-        company: web3.toUtf8(rentals[2][lastIndex - i]).replace(/\s+/g,''),
-        price: rentals[3][lastIndex - i].toNumber(),
-        start: rentals[4][lastIndex - i].toNumber(),
-        end: rentals[5][lastIndex - i].toNumber(),
-        help: "haha"
+    this.getRentals().then((rentals) => {
+      console.log(rentals)
+      var lastIndex = rentals[0].length - 1
+      for(let i = 0; i < rentals[0].length; i++){
+        let currentProp = {
+          status: rentals[0][lastIndex - i].toNumber(),
+          location: web3.toUtf8(rentals[1][lastIndex- i]).replace(/\s+/g,''),
+          company: web3.toUtf8(rentals[2][lastIndex - i]).replace(/\s+/g,''),
+          price: rentals[3][lastIndex - i].toNumber(),
+          start: rentals[4][lastIndex - i].toNumber(),
+          end: rentals[5][lastIndex - i].toNumber(),
+          help: "haha"
+        }
+        this.updateDB(currentProp)
       }
-      this.updateDB(currentProp);
-    }
-    this.getDataFromDb(); 
-
-  };
-
+      this.getDataFromDb() 
+    })
+    
+  }
 
   updateDB = (updateToApply) => {
     axios.post("http://localhost:3001/api/updateData", {

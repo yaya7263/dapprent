@@ -1,32 +1,50 @@
-//module.exports = (web3) => {
-var smartContractSetUp = function(web3) {
-    var HomeAwayContract = web3.eth.contract([
+import Web3 from 'web3';
+
+var web3 = new Web3(window.web3.currentProvider);
+
+const address = '0x52741cc51640d52d5b801e6e1fd5094c996f7ea5';
+
+const abi =[
     {
         "constant": false,
         "inputs": [
             {
-                "name": "_location",
-                "type": "bytes32"
+                "name": "newAddress",
+                "type": "address"
+            }
+        ],
+        "name": "addMarket",
+        "outputs": [],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "location_",
+                "type": "string"
             },
             {
-                "name": "_rentee",
-                "type": "bytes32"
+                "name": "rentor",
+                "type": "string"
             },
             {
-                "name": "_price",
+                "name": "rentStart_",
                 "type": "uint256"
             },
             {
-                "name": "_start",
+                "name": "rentEnd_",
                 "type": "uint256"
             },
             {
-                "name": "_end",
+                "name": "price_",
                 "type": "uint256"
             },
             {
-                "name": "_company",
-                "type": "bytes32"
+                "name": "currentTime_",
+                "type": "uint256"
             }
         ],
         "name": "rentProperty",
@@ -37,51 +55,41 @@ var smartContractSetUp = function(web3) {
     },
     {
         "constant": true,
-        "inputs": [],
-        "name": "transactions",
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
         "inputs": [
             {
-                "name": "_index",
-                "type": "uint256"
+                "name": "location_",
+                "type": "string"
             }
         ],
-        "name": "getRecentRentals",
+        "name": "getProperty",
         "outputs": [
             {
                 "name": "",
-                "type": "uint256[]"
+                "type": "string"
             },
             {
                 "name": "",
-                "type": "bytes32[]"
+                "type": "string"
             },
             {
                 "name": "",
-                "type": "bytes32[]"
+                "type": "string"
             },
             {
                 "name": "",
-                "type": "uint256[]"
+                "type": "bool"
             },
             {
                 "name": "",
-                "type": "uint256[]"
+                "type": "uint256"
             },
             {
                 "name": "",
-                "type": "uint256[]"
+                "type": "uint256"
+            },
+            {
+                "name": "",
+                "type": "uint256"
             }
         ],
         "payable": false,
@@ -92,11 +100,51 @@ var smartContractSetUp = function(web3) {
         "constant": false,
         "inputs": [
             {
-                "name": "_location",
-                "type": "bytes32"
+                "name": "location_",
+                "type": "string"
             }
         ],
-        "name": "deleteRental",
+        "name": "openForRent",
+        "outputs": [],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getProperties",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256[4]"
+            },
+            {
+                "name": "",
+                "type": "bool[4]"
+            },
+            {
+                "name": "",
+                "type": "uint256[4]"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "location_",
+                "type": "string"
+            },
+            {
+                "name": "price_",
+                "type": "uint256"
+            }
+        ],
+        "name": "addProperty",
         "outputs": [],
         "payable": true,
         "stateMutability": "payable",
@@ -110,67 +158,47 @@ var smartContractSetUp = function(web3) {
                 "type": "uint256"
             }
         ],
-        "name": "rentals",
+        "name": "properties",
         "outputs": [
             {
-                "name": "status",
-                "type": "uint256"
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "name": "rentor",
+                "type": "string"
             },
             {
                 "name": "location",
-                "type": "bytes32"
+                "type": "string"
             },
             {
-                "name": "rentee",
-                "type": "bytes32"
+                "name": "marketplace",
+                "type": "string"
+            },
+            {
+                "name": "forRent",
+                "type": "bool"
+            },
+            {
+                "name": "hash",
+                "type": "uint256"
             },
             {
                 "name": "price",
                 "type": "uint256"
             },
             {
-                "name": "start",
+                "name": "rentStart",
                 "type": "uint256"
             },
             {
-                "name": "end",
-                "type": "uint256"
-            },
-            {
-                "name": "company",
-                "type": "bytes32"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [
-            {
-                "name": "",
-                "type": "bytes32"
-            }
-        ],
-        "name": "indexes",
-        "outputs": [
-            {
-                "name": "",
+                "name": "rentEnd",
                 "type": "uint256"
             }
         ],
         "payable": false,
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [],
-        "name": "deleteRentals",
-        "outputs": [],
-        "payable": true,
-        "stateMutability": "payable",
         "type": "function"
     },
     {
@@ -178,28 +206,8 @@ var smartContractSetUp = function(web3) {
         "payable": false,
         "stateMutability": "nonpayable",
         "type": "constructor"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
-                "name": "transaction",
-                "type": "bool"
-            }
-        ],
-        "name": "transactionResult",
-        "type": "event"
     }
-]);
+]
 
-    var HomeAway = HomeAwayContract.at('0xf4c1645e84c5a4f776b2d6c7755399288009b153');       // Actual contract address
-    console.log("Successfully connected to Smart Contract!")
-
-    return HomeAway;
-
-
-};
-
-
-module.exports.smartContractSetUp = smartContractSetUp;
+var myContract = web3.eth.contract(abi, address)
+export default myContract; 
