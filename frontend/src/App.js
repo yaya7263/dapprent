@@ -93,17 +93,13 @@ class App extends Component {
       <Modal style={{ top: '30%'}} show={this.state.showConflict} onHide={this.handleConflictClose} >
       <Modal.Dialog>
         <Modal.Header closeButton>
-          <Modal.Title>Modal title</Modal.Title>
+          <Modal.Title>Info</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
-          <p>Modal body text goes here.</p>
+          <p>Please Refresh Page after Update</p>
         </Modal.Body>
 
-        <Modal.Footer>
-          <Button variant="secondary">Close</Button>
-          <Button variant="primary">Save changes</Button>
-        </Modal.Footer>
       </Modal.Dialog>
       </Modal> )
   }
