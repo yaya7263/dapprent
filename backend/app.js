@@ -17,6 +17,7 @@ app.use(cors({
   }));
 
 Property =require('./models/property');
+Processing = require('./models/processing')
 
 mongoose.connect('mongodb://localhost/Database', { useNewUrlParser: true })
 
@@ -47,6 +48,7 @@ var abc = function() {
 	}
 }
 
+
 //abc()
 
 app.get('/api/property', (req, res) => {
@@ -71,16 +73,73 @@ app.post('/api/property', (req, res) => {
 app.post('/api/updateData', (req, res) => {
 	console.log(req.body.update.location)
 	var id = req.body.update._id;
-
+	var myProperty = null; 
+	Property.find({location: req.body.update.location}, (err, Propertyz) => {
+		myProperty = Propertyz
+		console.log(myProperty[0].status)
+		if(myProperty[0].status != 1) { // returns and doesn't update if true
+			console.log("updating")
+			Property.findOneAndUpdate({ location: req.body.update.location }, req.body.update, err => {
+				if (err) return res.json({ success: false, error: err });
+				return res.json({ success: true });
+			});
+		}
+		else {
+			console.log("rejecting")
+			return res.json({ success: true });
+		}
+	})
+	
+// can only update the database if avail or processing
+/*
 	Property.findOneAndUpdate({ location: req.body.update.location }, req.body.update, err => {
 		if (err) return res.json({ success: false, error: err });
 		return res.json({ success: true });
 	});
-	
 
+
+*/
     
 	}
 )
+
+
+app.get('/api/processing', (req, res) => {
+	Processing.find((err, Propertys) => {
+		if(err){
+			throw err;
+		}
+		res.json({ data: Propertys});
+	});
+});
+
+app.post('/api/processing', (req, res) => {
+    var prop = req.body
+    Processing.create(prop, (err,Property) => {
+        if(err){
+            throw err;
+        }
+        res.json(Property)
+    })
+})
+
+
+app.post('/api/updateProcessing', (req, res) => {
+	console.log(req.body.update.location)
+	var id = req.body.update._id;
+	// can only be updated if it is in processing or avail.
+	Processing.findOneAndUpdate({ status: 0, location: req.body.update.location }, req.body.update, err => {
+		if (err) return res.json({ success: false, error: err });
+		return res.json({ success: true });
+	});
+	Processing.findOneAndUpdate({ status: 2, location: req.body.update.location }, req.body.update, err => {
+		if (err) return res.json({ success: false, error: err });
+		return res.json({ success: true });
+	});
+	
+	}
+)
+
 
 
 app.listen(3001)

@@ -35,7 +35,8 @@ class App extends Component {
       endDate: new Date(),
       firstName: "Ludwig",
       showConflict: false,
-      lastName: "Wittgenstein"
+      lastName: "Wittgenstein",
+      processing: []
     };
     this.handleCompanySubmit = this.handleCompanySubmit.bind(this);
 
@@ -44,13 +45,12 @@ class App extends Component {
   handleRentSubmit = event => {
     event.preventDefault(); 
     this.state.rentProperty.rentee = this.state.firstName + this.state.lastName
-    console.log(this.state.rentProperty.rentee)
     scFunctions.scRent(this.state.rentProperty, this.state.company);
-    console.log("Added transaction to smart Contract");
     this.state.rentProperty.status = 2; 
-    this.updateDB(this.state.rentProperty); 
-
-
+    this.updateDB(this.state.rentProperty);
+    this.state.processing.push(this.state.rentProperty.location)
+    this.handleClose()
+    //console.log(this.state.processing[0])
   }
 
 
@@ -81,10 +81,7 @@ class App extends Component {
   };
 
   compareData = () => {
-    this.setState(this.state);
-    console.log("hello")
     this.setState({showConflict: true})
-    console.log(this.state.showConflict)
   }
 
   handleConflictClose = () => {
@@ -92,7 +89,6 @@ class App extends Component {
   }
 
   showConflictModal = () => {
-    console.log("conflictmodalzz")
     return (
       <Modal style={{ top: '30%'}} show={this.state.showConflict} onHide={this.handleConflictClose} >
       <Modal.Dialog>
@@ -113,7 +109,6 @@ class App extends Component {
   }
   getDataBC = () => {
     var rentals = scFunctions.getRents();
-    console.log(web3.toAscii(rentals[1][0]));
 
 
     for(let i = 0; i < rentals[0].length; i++){
@@ -126,7 +121,6 @@ class App extends Component {
         end: rentals[5][i].toNumber(),
         help: "haha"
       }
-      console.log(currentProp)
       this.updateDB(currentProp);
     }
     this.getDataFromDb(); 
@@ -143,7 +137,6 @@ class App extends Component {
 
 /*
     scFunctions.scRent(prop, this.state.company);
-    console.log("Added transaction to smart Contract");
     prop.status = 2; 
     this.updateDB(prop); 
 */
@@ -159,6 +152,9 @@ class App extends Component {
 
   handleUpdateProperty = () => {
     this.getDataBC(); 
+    console.log(this.state.data[4].rentee)
+    console.log(this.state.data[4].company)
+    console.log(this.state.data[4].status)
 //db.inventory.find( { status: "D" } )
   }
     
@@ -204,10 +200,10 @@ class App extends Component {
 
   renderStatusButton = property => {
     if (property.status == 1){
-      return <Button variant="danger"> Unavailable </Button>
+      return <Button variant="danger"> Unavailable rented By {property.company} {property.rentee}</Button>
     }
     else if (property.status == 2){
-      return <Button variant="primary"> Processing </Button>
+      return <Button variant="primary" onClick={()=>this.handleRentProperty(property)}> Processing by {property.rentee}</Button>
     }
     return <Button variant="success" onClick={()=>this.handleRentProperty(property)}> Rent Property </Button>
   }
@@ -217,8 +213,6 @@ class App extends Component {
     data.forEach((property,index) => {
       propRow.push(<Col xs={{ size:3, offset: .5}}> 
         <Jumbotron>
-          {console.log(property.image)}
-          {console.log(typeof property.image)}
           <Image src={pathToImages(property.image)} fluid rounded />
           <b> {property.location} </b> 
           <h1> Price: {property.price} </h1> 
