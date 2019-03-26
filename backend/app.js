@@ -19,13 +19,29 @@ app.use(cors({
 Property =require('./models/property');
 Processing = require('./models/processing')
 
-mongoose.connect('mongodb://localhost/Database', { useNewUrlParser: true })
+//mongoose.connect('mongodb://localhost/Database', { useNewUrlParser: true })
+const uri = "mongodb+srv://Yang5297:hahaha123@homeaway-gux9g.mongodb.net/homeaway?retryWrites=true";
+mongoose
+  .connect(
+    uri.toString()
+  )
+  .then(() => {
+    console.log("Connected to database!");
+  })
+  .catch((error) => {
+    console.log("Connection failed!");
+    console.log(error);
+  });
 
 var HouseArray = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]
 var prices = [499, 199, 75, 143, 324, 659, 793, 458,834,3880]
 
 
-var abc = function() {
+var abc = function () {
+
+    Property.remove({}, function (err) {
+        console.log('collection removed')
+    });
 	console.log("geenrate")
 	for (i = 0 ; i < 9; i++) {
 		prop = {
@@ -47,7 +63,7 @@ var abc = function() {
 
 	}
 }
-
+//abc()
 //hello :)
 //
 app.get('/api/property', (req, res) => {
@@ -72,7 +88,13 @@ app.post('/api/property', (req, res) => {
 app.post('/api/updateData', (req, res) => {
 	console.log(req.body.update.location)
 	var id = req.body.update._id;
-	var myProperty = null; 
+	var myProperty = null;
+
+	Property.findOneAndUpdate({ $or: [{status: 2}, {status: 0}], location: req.body.update.location }, req.body.update, err => {
+	    if (err) return res.json({ success: false, error: err });
+	    return res.json({ success: true })
+	});
+    /*
 	Property.find({location: req.body.update.location}, (err, Propertyz) => {
 		myProperty = Propertyz
 		console.log(myProperty[0].status)

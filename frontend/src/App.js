@@ -45,9 +45,14 @@ class App extends Component {
   handleRentSubmit = event => {
     event.preventDefault(); 
     this.state.rentProperty.rentee = this.state.firstName + this.state.lastName
-    scFunctions.scRent(this.state.rentProperty, this.state.company);
-    this.state.rentProperty.status = 2; 
-    this.updateDB(this.state.rentProperty);
+    this.state.rentProperty.status = 1;  
+
+    //so first send it to blockchain with status " rented" , then set current state of property o
+    scFunctions.scRent(this.state.rentProperty, this.state.company)
+    let rentSubmitProp = this.state.rentProperty
+    rentSubmitProp.status = 2; 
+    this.updateDB(rentSubmitProp)
+   
    // this.state.processing.push(this.state.rentProperty.location)
     this.handleClose()
     //console.log(this.state.processing[0])
@@ -136,7 +141,7 @@ class App extends Component {
 
 
 /*
-    scFunctions.scRent(prop, this.state.company);
+    scFunctions. (prop, this.state.company);
     prop.status = 2; 
     this.updateDB(prop); 
 */

@@ -2,198 +2,202 @@ import Web3 from 'web3';
 
 var web3 = new Web3(window.web3.currentProvider);
 
-const address = '0x0f9384a3a7bc9c6a33ac32aa837b83765aa774a6';
+const address = '0xcad323ee64975c11c4719e2df30ec8596f449570';
 
 const abi =[
 	{
-		"constant": false,
-		"inputs": [
+	    "constant": false,
+	    "inputs": [
 			{
-				"name": "_location",
-				"type": "bytes32"
+			    "name": "_location",
+			    "type": "bytes32"
 			}
-		],
-		"name": "deleteRental",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
+	    ],
+	    "name": "deleteRental",
+	    "outputs": [],
+	    "payable": true,
+	    "stateMutability": "payable",
+	    "type": "function"
 	},
 	{
-		"constant": false,
-		"inputs": [],
-		"name": "deleteRentals",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
+	    "constant": false,
+	    "inputs": [],
+	    "name": "deleteRentals",
+	    "outputs": [],
+	    "payable": true,
+	    "stateMutability": "payable",
+	    "type": "function"
 	},
 	{
-		"constant": false,
-		"inputs": [
+	    "constant": false,
+	    "inputs": [
 			{
-				"name": "_location",
-				"type": "bytes32"
+			    "name": "_status",
+			    "type": "uint256"
 			},
 			{
-				"name": "_rentee",
-				"type": "bytes32"
+			    "name": "_location",
+			    "type": "bytes32"
 			},
 			{
-				"name": "_price",
-				"type": "uint256"
+			    "name": "_rentee",
+			    "type": "bytes32"
 			},
 			{
-				"name": "_start",
-				"type": "uint256"
+			    "name": "_price",
+			    "type": "uint256"
 			},
 			{
-				"name": "_end",
-				"type": "uint256"
+			    "name": "_start",
+			    "type": "uint256"
 			},
 			{
-				"name": "_company",
-				"type": "bytes32"
+			    "name": "_end",
+			    "type": "uint256"
+			},
+			{
+			    "name": "_company",
+			    "type": "bytes32"
 			}
-		],
-		"name": "rentProperty",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
+	    ],
+	    "name": "rentProperty",
+	    "outputs": [],
+	    "payable": true,
+	    "stateMutability": "payable",
+	    "type": "function"
 	},
 	{
-		"inputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "constructor"
+	    "inputs": [],
+	    "payable": false,
+	    "stateMutability": "nonpayable",
+	    "type": "constructor"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
+	    "anonymous": false,
+	    "inputs": [
 			{
-				"indexed": false,
-				"name": "transaction",
-				"type": "bool"
+			    "indexed": false,
+			    "name": "transaction",
+			    "type": "bool"
 			}
-		],
-		"name": "transactionResult",
-		"type": "event"
+	    ],
+	    "name": "transactionResult",
+	    "type": "event"
 	},
 	{
-		"constant": true,
-		"inputs": [
+	    "constant": true,
+	    "inputs": [
 			{
-				"name": "_index",
-				"type": "uint256"
+			    "name": "_index",
+			    "type": "uint256"
 			}
-		],
-		"name": "getRecentRentals",
-		"outputs": [
+	    ],
+	    "name": "getRecentRentals",
+	    "outputs": [
 			{
-				"name": "",
-				"type": "uint256[]"
+			    "name": "",
+			    "type": "uint256[]"
 			},
 			{
-				"name": "",
-				"type": "bytes32[]"
+			    "name": "",
+			    "type": "bytes32[]"
 			},
 			{
-				"name": "",
-				"type": "bytes32[]"
+			    "name": "",
+			    "type": "bytes32[]"
 			},
 			{
-				"name": "",
-				"type": "uint256[]"
+			    "name": "",
+			    "type": "uint256[]"
 			},
 			{
-				"name": "",
-				"type": "uint256[]"
+			    "name": "",
+			    "type": "uint256[]"
 			},
 			{
-				"name": "",
-				"type": "uint256[]"
+			    "name": "",
+			    "type": "uint256[]"
 			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
+	    ],
+	    "payable": false,
+	    "stateMutability": "view",
+	    "type": "function"
 	},
 	{
-		"constant": true,
-		"inputs": [
+	    "constant": true,
+	    "inputs": [
 			{
-				"name": "",
-				"type": "bytes32"
+			    "name": "",
+			    "type": "bytes32"
 			}
-		],
-		"name": "indexes",
-		"outputs": [
+	    ],
+	    "name": "indexes",
+	    "outputs": [
 			{
-				"name": "",
-				"type": "uint256"
+			    "name": "",
+			    "type": "uint256"
 			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
+	    ],
+	    "payable": false,
+	    "stateMutability": "view",
+	    "type": "function"
 	},
 	{
-		"constant": true,
-		"inputs": [
+	    "constant": true,
+	    "inputs": [
 			{
-				"name": "",
-				"type": "uint256"
+			    "name": "",
+			    "type": "uint256"
 			}
-		],
-		"name": "rentals",
-		"outputs": [
+	    ],
+	    "name": "rentals",
+	    "outputs": [
 			{
-				"name": "status",
-				"type": "uint256"
+			    "name": "status",
+			    "type": "uint256"
 			},
 			{
-				"name": "location",
-				"type": "bytes32"
+			    "name": "location",
+			    "type": "bytes32"
 			},
 			{
-				"name": "rentee",
-				"type": "bytes32"
+			    "name": "rentee",
+			    "type": "bytes32"
 			},
 			{
-				"name": "price",
-				"type": "uint256"
+			    "name": "price",
+			    "type": "uint256"
 			},
 			{
-				"name": "start",
-				"type": "uint256"
+			    "name": "start",
+			    "type": "uint256"
 			},
 			{
-				"name": "end",
-				"type": "uint256"
+			    "name": "end",
+			    "type": "uint256"
 			},
 			{
-				"name": "company",
-				"type": "bytes32"
+			    "name": "company",
+			    "type": "bytes32"
 			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
+	    ],
+	    "payable": false,
+	    "stateMutability": "view",
+	    "type": "function"
 	},
 	{
-		"constant": true,
-		"inputs": [],
-		"name": "transactions",
-		"outputs": [
+	    "constant": true,
+	    "inputs": [],
+	    "name": "transactions",
+	    "outputs": [
 			{
-				"name": "",
-				"type": "uint256"
+			    "name": "",
+			    "type": "uint256"
 			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
+	    ],
+	    "payable": false,
+	    "stateMutability": "view",
+	    "type": "function"
 	}
 ]
 
@@ -204,7 +208,7 @@ var contractInstance = myContract.at(address)
 
 const scRent = (prop, company) => { 
 	contractInstance.rentProperty(
-		web3.fromAscii(prop.location), "0x79616e67", prop.price, prop.start, prop.end, web3.fromAscii(company),
+		prop.status, web3.fromAscii(prop.location), "0x79616e67", prop.price, prop.start, prop.end, web3.fromAscii(company),
 		{from: window.web3.eth.accounts[0], gas: 3000000, value: 100}, function(err, res){});
 }
 
@@ -219,6 +223,7 @@ const getRents = () => {
 		      let price = transactions[3]; 
 			  let start = transactions[4];
 			  let end = transactions[5];
+              console.log(status[1])
 			  resolve([status, location, company, price, start, end]); 
 		})
 	})

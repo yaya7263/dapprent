@@ -45,6 +45,7 @@ class OwnerSubmit extends React.Component {
   handleSubmit = e => {
   	e.preventDefault()
   	var property ={
+        status: 1, 
   		location: this.state.location,
   		price: this.state.price,
   		start: this.state.start,
