@@ -4,9 +4,11 @@ import { MonToNum, MonToStr } from './Components/monthConvert.js'
 import "react-datepicker/dist/react-datepicker.css";
 import { Container, Button, Col, Form } from 'react-bootstrap/dist/react-bootstrap.js'
 import axios from "axios";
-const scFunctions = require("./Components/scFunctions"); 
-// what this class will do is a direct submit to smart contract
-class OwnerSubmit extends React.Component {
+
+// help from https://react-bootstrap.github.io/components/forms/
+
+
+class submitProperty extends React.Component {
     constructor(props) {
         super(props); 
         this.state = {
@@ -43,50 +45,41 @@ class OwnerSubmit extends React.Component {
                 <Form noValidate validated={this.state.validated} onSubmit={e=> this.handlePropertySubmit(e)}>
                     <Form.Row>
                         <Form.Group as={Col} md="3" style={{marginRight:50}}>
-                            <Form.Label> First Name</Form.Label>
+                            <Form.Label>Rentor's First Name</Form.Label>
                             <Form.Control
-                            id="firstName"
                             type="text"
-                            placeholder="Lev"
-                            required
+                            placeholder="Ludwig"
                             />
                         </Form.Group>
                         <Form.Group as={Col} md="3">
                             <Form.Label>Last Name</Form.Label>
                             <Form.Control
-                            id="lastName"
                             type="text"
-                            placeholder="Myshkin the Prince"
+                            placeholder="Wittgenstein"
                              />
                         </Form.Group>
                     </Form.Row> 
                     <Form.Row>
                         <Form.Group as={Col} md="7" > 
-                            <Form.Control type="text" placeholder="Location" id="location" required />
-                            <Form.Control.Feedback type="invalid">
-                                Please enter a location.
-                            </Form.Control.Feedback>
-                            </Form.Group>
+                        <Form.Control type="text" placeholder="Location" id="location" required />
+                        <Form.Control.Feedback type="invalid">
+                            Please enter a location.
+                        </Form.Control.Feedback>
+                        </Form.Group>
                     </Form.Row>
                     <Form.Row>
-                        <Form.Group as={Col} md="3" style={{marginRight:50}}> 
-                            <Form.Control type="text" pattern="[0-9]*" placeholder="Company" id="company" required />
-                            <Form.Control.Feedback type="invalid">
-                                Please enter where the property was rented. 
-                            </Form.Control.Feedback>
-                        </Form.Group> 
-                        <Form.Group as={Col} md="3"> 
-                            <Form.Control type="text" pattern="[0-9]*" placeholder="Price" id="price" required />
-                            <Form.Control.Feedback type="invalid">
-                                Please enter a price for the property. 
-                            </Form.Control.Feedback>
+                        <Form.Group as={Col} md="7"> 
+                        <Form.Control type="text" pattern="[0-9]*" placeholder="Price" id="price" required />
+                        <Form.Control.Feedback type="invalid">
+                            Please enter a price for the property. 
+                        </Form.Control.Feedback>
                         </Form.Group> 
                     </Form.Row>
                     <Button type="submit">Submit Property</Button>
                 </Form> 
-            </Container>
-    )
+		    </Container>
+             )
     }
 }
 
-export default OwnerSubmit; 
+export default submitProperty; 

@@ -76,12 +76,12 @@ app.get('/api/property', (req, res) => {
 });
 
 app.post('/api/property', (req, res) => {
-    var prop = req.body
-    Property.create(prop, (err,Property) => {
+    var prop = req.body.property
+    Property.create(prop, (err,Propertyz) => {
         if(err){
             throw err;
         }
-        res.json(Property)
+        res.json(Propertyz)
     })
 })
 
