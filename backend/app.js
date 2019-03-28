@@ -133,7 +133,7 @@ app.post('/api/updateData2', (req, res) => {
     var id = req.body.update._id;
     var myProperty = null;
 
-    Property.findOneAndUpdate({ location: req.body.update.location }, req.body.update, err => {
+    Property.findOneAndUpdate({  location: req.body.update.location }, req.body.update, err => {
         if (err) return res.json({ success: false, error: err });
         return res.json({ success: true })
     });

@@ -5,7 +5,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Container, Button, Col, Form } from 'react-bootstrap/dist/react-bootstrap.js'
 import axios from "axios";
 import { scRent }  from "./Components/scFunctions"; 
-const scFunctions = require("./Components/scFunctions"); 
 var moment = require('moment');
 
 // THIS IS FOR SUBMITTING RENTAL TO DATABASE AND SMART CONTRACT. 
