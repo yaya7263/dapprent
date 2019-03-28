@@ -3,107 +3,145 @@ import DatePicker from "react-datepicker";
 import { MonToNum, MonToStr } from './Components/monthConvert.js'
 import "react-datepicker/dist/react-datepicker.css";
 import { Container, Button, Col, Form } from 'react-bootstrap/dist/react-bootstrap.js'
-
+import axios from "axios";
+import { scRent }  from "./Components/scFunctions"; 
 const scFunctions = require("./Components/scFunctions"); 
-// This is for cancel listings. The Status for canceling will be 3....
+var moment = require('moment');
 
-// Change Listing will be 4 ?
+// Change Listing will be 4, Cancel Listing will be 5
 class ChangeListing extends React.Component {
     constructor(props) {
         super(props); 
         this.state = {
-            location: "Venus",
-            firstName: "Ludwig",
-            lastName: "Wittgenstein",
-            price: 0,
-            start: 0,
-            end: 0,
-            company: "Homeaway"
+            validated: false,
+            startDate: new Date(),
+            endDate: new Date()
         }
     }
-    handleFirstName = e => {
-      this.setState({ firstName: e.target.value })
+    async submitDB(myProp) {
+
+
+    }
+    handlePropertySubmit = event => {
+        event.preventDefault()
+
+        let startDate = moment(this.state.startDate).format('MMMDDYYYY');
+        startDate = parseInt(MonToNum(startDate)) 
+        let endDate = moment(this.state.endDate).format('MMMDDYYYY');
+        endDate = parseInt(MonToNum(endDate)) 
+        var prop = {
+            status: 2,
+            location: event.target.elements.location.value,
+            rentee: event.target.elements.firstName.value + event.target.elements.lastName.value,
+            company: event.target.elements.company.value,
+            price: parseInt(event.target.elements.price.value,10),
+            start: startDate,
+            end: endDate
+        }
+        if (event.target.checkValidity() === false) {
+            event.stopPropagation();
+        }
+        this.setState({ validated: true }); 
+        if (event.target.checkValidity() === true) {
+            axios.post("http://localhost:3001/api/updateData", {
+                update: prop
+            }).then((result,oreo) => {
+                console.log(result.data)
+                console.log(oreo)
+                prop.status = 1;
+                scRent(prop, prop.location)
+            })
+        }
     }
 
-        handleLastName = e => {
-            this.setState({ lastName: e.target.value })
-        }
-        handleLocation = e => {
-            this.setState({ location: e.target.value })
-        }
-        handlePrice = e => {
-            this.setState({ price: parseInt(e.target.value,10) })
-        }
-        handleStart = e => {
-            this.setState({ start: parseInt(e.target.value,10) })
-        }
-        handleEnd = e => {
-            this.setState({ end: parseInt(e.target.value) })
-        }
-        handleCompany = e => {
-            this.setState({ company: e.target.value })
-        }
+    handleStartDateChange = date => {
+         this.setState({
+        startDate: date
+    });
+    }
 
-        handleSubmit = e => {
-            e.preventDefault()
-            var property ={
-                status: 1, 
-                location: this.state.location,
-                price: this.state.price,
-                start: this.state.start,
-                end: this.state.end,
-                company: this.state.company
-            }
-            scFunctions.scRent(property, property.company);
-        }
-        render() {
-            return (
-                <Container style= {{ marginTop: 30 }}> 
-			<Form onSubmit={e => this.handleSubmit(e)}>
-			  <Form.Row>
-			    <Form.Group as={Col} xs="3">
-			      <Form.Label>First Name</Form.Label>
-			      <Form.Control onChange={this.handleFirstName} />
-			    </Form.Group>
-			    <Form.Group as={Col} style= {{marginLeft: 50}} md="3">
-			      <Form.Label>Last Name</Form.Label>
-			      <Form.Control onChange={this.handleLastName}/>
-			    </Form.Group>
-			  </Form.Row>
-			  <Form.Row> 
-			  	<Form.Group >
-				  <Form.Label>Address</Form.Label>
-				  <Form.Control style={{width: 605}} placeholder="Planet name please" onChange={this.handleLocation}/>
-				</Form.Group>
-			  </Form.Row> 
-			  <Form.Row>
-			    <Form.Group as={Col} md="3">
-			      <Form.Label>Start Date</Form.Label>
-			      <Form.Control placeholder="date as integer with no spaces" onChange={this.handleStart} />
-			    </Form.Group>
-			    <Form.Group as={Col} md="3" style= {{marginLeft: 50}}>
-			      <Form.Label>End Date</Form.Label>
-			      <Form.Control placeholder="date as integer with no spaces" onChange={this.handleEnd}/>
-			    </Form.Group>
-			  </Form.Row>
-			  <Form.Row> 
-				  <Form.Group as={Col} md="3">
-				  	<Form.Label> Company </Form.Label> 
-				    <Form.Control placeholder="Rented from whom? " onChange={this.handleCompany} />
-				  </Form.Group>
-				  <Form.Group as={Col} md="3" style= {{marginLeft: 50}}>
-				  	<Form.Label> Price </Form.Label> 
-				    <Form.Control onChange={this.handlePrice} />
-				  </Form.Group>
-			  </Form.Row> 
-			  <Button variant="primary" type="submit" >
-			    Submit
-			  </Button>
-			</Form>
-		</Container>
+    handleEndDateChange = date => {
+        this.setState({
+        endDate: date
+    });
+
+    }
+    render() {
+        return (
+            <Container style= {{ marginTop: 30 }}> 
+                <Form noValidate validated={this.state.validated} onSubmit={e=> this.handlePropertySubmit(e)}>
+                    <Form.Row>
+                        <Form.Group as={Col} md="3" style={{marginRight:50}}>
+                            <Form.Label> First Name</Form.Label>
+                            <Form.Control
+id="firstName"
+type="text"
+placeholder="Lev"
+required
+/>
+</Form.Group>
+<Form.Group as={Col} md="3">
+    <Form.Label>Last Name</Form.Label>
+    <Form.Control
+id="lastName"
+type="text"
+placeholder="Myshkin the Prince"
+ />
+</Form.Group>
+</Form.Row> 
+<Form.Row>
+<Form.Group as={Col} md="7" > 
+    <Form.Control type="text" placeholder="Location" id="location" required />
+    <Form.Control.Feedback type="invalid">
+        Please enter a location.
+    </Form.Control.Feedback>
+    </Form.Group>
+</Form.Row>
+<Form.Row> 
+<Form.Group as={Col} md="3" style = {{marginLeft: 5 }}> 
+                            <Form.Row> 
+                            <Form.Label> Start Date </Form.Label>
+                            </Form.Row>
+                            <Form.Row>
+                            <DatePicker
+dateFormat="MMMM d, yyyy"
+selected={this.state.startDate}
+onChange={this.handleStartDateChange}
+/>
+</Form.Row>
+</Form.Group>   
+<Form.Group as={Col} md="3" style = {{marginLeft: 50}}>
+                            <Form.Row> 
+                            <Form.Label> End Date </Form.Label>
+                            </Form.Row>
+                            <Form.Row>
+                            <DatePicker
+dateFormat="MMMM d, yyyy"
+selected={this.state.endDate}
+onChange={this.handleEndDateChange}
+/>
+</Form.Row>
+</Form.Group> 
+</Form.Row> 
+<Form.Row>
+<Form.Group as={Col} md="3" style={{marginRight:50}}> 
+                            <Form.Control type="text" placeholder="Company" id="company" required />
+                            <Form.Control.Feedback type="invalid">
+                                Please enter where the property was rented. 
+                            </Form.Control.Feedback>
+                        </Form.Group> 
+                        <Form.Group as={Col} md="3"> 
+                            <Form.Control type="text" pattern="[0-9]*" placeholder="Price" id="price" required />
+                            <Form.Control.Feedback type="invalid">
+                                Please enter a price for the property. 
+                            </Form.Control.Feedback>
+                        </Form.Group> 
+                    </Form.Row>
+                    <Button type="submit">Submit Property</Button>
+                </Form> 
+            </Container>
     )
- 
-			    }
-			    }
+                                }
+                                }
 
 export default ChangeListing; 

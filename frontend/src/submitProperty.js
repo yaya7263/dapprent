@@ -1,12 +1,9 @@
 import React from "react";
-import DatePicker from "react-datepicker";
-import { MonToNum, MonToStr } from './Components/monthConvert.js'
-import "react-datepicker/dist/react-datepicker.css";
 import { Container, Button, Col, Form } from 'react-bootstrap/dist/react-bootstrap.js'
 import axios from "axios";
 
 // help from https://react-bootstrap.github.io/components/forms/
-
+// THIS IS FOR ADDING A PROP
 
 class submitProperty extends React.Component {
     constructor(props) {
@@ -20,14 +17,13 @@ class submitProperty extends React.Component {
         event.preventDefault()
  
         var prop = {
-            status: 0,
+            status: 1,
             location: event.target.elements.location.value,
             rentee: "empty",
             company: "empty",
             price: parseInt(event.target.elements.price.value,10),
             start: 0,
-            end: 0,
-            image: "./images/99.jpg"
+            end: 0
         }
         if (event.target.checkValidity() === false) {
             event.stopPropagation();

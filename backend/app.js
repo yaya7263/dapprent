@@ -37,6 +37,7 @@ var HouseArray = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Ura
 var prices = [499, 199, 75, 143, 324, 659, 793, 458,834,3880]
 
 
+// this is to RECREATE the database
 var abc = function () {
 
     Property.remove({}, function (err) {
@@ -85,6 +86,7 @@ app.post('/api/property', (req, res) => {
     })
 })
 
+// ONLY updates if status 0 or 2
 app.post('/api/updateData', (req, res) => {
 	console.log(req.body.update.location)
 	var id = req.body.update._id;
@@ -94,6 +96,7 @@ app.post('/api/updateData', (req, res) => {
 	    if (err) return res.json({ success: false, error: err });
 	    return res.json({ success: true })
 	});
+    //return res.json({success: false})
     /*
 	Property.find({location: req.body.update.location}, (err, Propertyz) => {
 		myProperty = Propertyz
@@ -122,6 +125,47 @@ app.post('/api/updateData', (req, res) => {
 */
     
 	}
+)
+
+// UPDATES DATA, DOESN'T CARE ABOUT STATUS
+app.post('/api/updateData2', (req, res) => {
+    console.log(req.body.update.location)
+    var id = req.body.update._id;
+    var myProperty = null;
+
+    Property.findOneAndUpdate({ location: req.body.update.location }, req.body.update, err => {
+        if (err) return res.json({ success: false, error: err });
+        return res.json({ success: true })
+    });
+    //return res.json({success: false})
+    /*
+	Property.find({location: req.body.update.location}, (err, Propertyz) => {
+		myProperty = Propertyz
+		console.log(myProperty[0].status)
+		if(myProperty[0].status != 1) { // returns and doesn't update if true
+			console.log("updating")
+			Property.findOneAndUpdate({ location: req.body.update.location }, req.body.update, err => {
+				if (err) return res.json({ success: false, error: err });
+				return res.json({ success: true });
+			});
+		}
+		else {
+			console.log("rejecting")
+			return res.json({ success: true });
+		}
+	})
+	
+// can only update the database if avail or processing
+/*
+	Property.findOneAndUpdate({ location: req.body.update.location }, req.body.update, err => {
+		if (err) return res.json({ success: false, error: err });
+		return res.json({ success: true });
+	});
+
+
+*/
+
+}
 )
 
 
