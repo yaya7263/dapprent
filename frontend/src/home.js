@@ -6,6 +6,7 @@ import NavBar from './navbar.js'
 import OwnerSubmit from './ownerSubmit.js'
 import ChangeListing from './changeListing.js'
 import submitProperty from './submitProperty.js'
+import deleteProperty from './deleteProperty.js'
 
 function AppRouter() {
   return (
@@ -20,6 +21,8 @@ function AppRouter() {
         <Route exact path="/submitProperty" component={submitProperty} />
         <Route exact path="/change" component={NavBar} />
         <Route exact path="/change" component={ChangeListing} />
+        <Route exact path="/delete" component={NavBar} />
+        <Route exact path="/delete" component={deleteProperty} />
       </div>
     </Router>
   );

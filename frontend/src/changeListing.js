@@ -7,7 +7,8 @@ import axios from "axios";
 import { scRent }  from "./Components/scFunctions"; 
 var moment = require('moment');
 
-// Change Listing will be 4, Cancel Listing will be 5
+// Cancel a rental will be 3, change a listing will be 4
+var myDict = { "cancel":0, "change": 1}
 class ChangeListing extends React.Component {
     constructor(props) {
         super(props); 
@@ -19,19 +20,15 @@ class ChangeListing extends React.Component {
             selectText: "Cancel a rent"
         }
     }
-    async submitDB(myProp) {
-
-
-    }
     handlePropertySubmit = event => {
         event.preventDefault()
-
+        var myStatus = myDict[this.state.select]
         let startDate = moment(this.state.startDate).format('MMMDDYYYY');
         startDate = parseInt(MonToNum(startDate)) 
         let endDate = moment(this.state.endDate).format('MMMDDYYYY');
         endDate = parseInt(MonToNum(endDate)) 
         var prop = {
-            status: 2,
+            status: myStatus,
             location: event.target.elements.location.value,
             rentee: event.target.elements.firstName.value + event.target.elements.lastName.value,
             company: event.target.elements.company.value,
@@ -43,13 +40,18 @@ class ChangeListing extends React.Component {
             event.stopPropagation();
         }
         this.setState({ validated: true }); 
+        
         if (event.target.checkValidity() === true) {
-            axios.post("http://localhost:3001/api/updateData", {
+            axios.post("http://localhost:3001/api/changeData", {
                 update: prop
-            }).then((result,oreo) => {
+            }).then((result) => {
+                if (myStatus == 0) {
+                    prop.status = 3
+                }
+                if (myStatus == 1){
+                    prop.status = 4
+                }
                 console.log(result.data)
-                console.log(oreo)
-                prop.status = 1;
                 scRent(prop, prop.location)
             })
         }
@@ -73,7 +75,7 @@ class ChangeListing extends React.Component {
             this.setState({selectText: "Cancel a rent"})
         }
         if (e.target.value == "change"){
-            this.setState({selectText: "Change rent date"})
+            this.setState({selectText: "Change rent date (Not in Processing)"})
         }
     }
     

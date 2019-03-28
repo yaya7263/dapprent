@@ -89,12 +89,9 @@ app.post('/api/property', (req, res) => {
 
 // Changes or Cancels a property. The different between this and updateData is that
 // It can override everything
-app.post('/api/updateData', (req, res) => {
+app.post('/api/changeData', (req, res) => {
     console.log(req.body.update.location)
-    var id = req.body.update._id;
-    var myProperty = null;
-
-    Property.findOneAndUpdate({ $or: [{ status: 2 }, { status: 0 }], location: req.body.update.location }, req.body.update, err => {
+    Property.findOneAndUpdate({ location: req.body.update.location }, req.body.update, err => {
         if (err) return res.json({ success: false, error: err });
         return res.json({ success: true })
     });
@@ -104,9 +101,6 @@ app.post('/api/updateData', (req, res) => {
 // ONLY updates if status 0 or 2
 app.post('/api/updateData', (req, res) => {
 	console.log(req.body.update.location)
-	var id = req.body.update._id;
-	var myProperty = null;
-
 	Property.findOneAndUpdate({ $or: [{status: 2}, {status: 0}], location: req.body.update.location }, req.body.update, err => {
 	    if (err) return res.json({ success: false, error: err });
 	    return res.json({ success: true })
