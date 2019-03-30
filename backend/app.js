@@ -66,7 +66,9 @@ var abc = function () {
 }
 //abc()
 //hello :)
-//
+
+
+// finds all properties
 app.get('/api/property', (req, res) => {
 	Property.find((err, Propertys) => {
 		if(err){
@@ -76,6 +78,18 @@ app.get('/api/property', (req, res) => {
 	});
 });
 
+// deletes a property
+app.delete('/api/delete', (req, res) => {
+    var prop = req.body.property.location
+    console.log(prop)
+    Property.remove({ location: prop }, function (err) {
+        if (err) return res.json({ success: false, error: err })
+        return res.json({success: true})
+    });
+    
+})
+
+//creates a property
 app.post('/api/property', (req, res) => {
     var prop = req.body.property
     Property.create(prop, (err,Propertyz) => {
@@ -135,48 +149,6 @@ app.post('/api/updateData', (req, res) => {
     
 	}
 )
-
-// UPDATES DATA, DOESN'T CARE ABOUT STATUS
-app.post('/api/updateData2', (req, res) => {
-    console.log(req.body.update.location)
-    var id = req.body.update._id;
-    var myProperty = null;
-
-    Property.findOneAndUpdate({  location: req.body.update.location }, req.body.update, err => {
-        if (err) return res.json({ success: false, error: err });
-        return res.json({ success: true })
-    });
-    //return res.json({success: false})
-    /*
-	Property.find({location: req.body.update.location}, (err, Propertyz) => {
-		myProperty = Propertyz
-		console.log(myProperty[0].status)
-		if(myProperty[0].status != 1) { // returns and doesn't update if true
-			console.log("updating")
-			Property.findOneAndUpdate({ location: req.body.update.location }, req.body.update, err => {
-				if (err) return res.json({ success: false, error: err });
-				return res.json({ success: true });
-			});
-		}
-		else {
-			console.log("rejecting")
-			return res.json({ success: true });
-		}
-	})
-	
-// can only update the database if avail or processing
-/*
-	Property.findOneAndUpdate({ location: req.body.update.location }, req.body.update, err => {
-		if (err) return res.json({ success: false, error: err });
-		return res.json({ success: true });
-	});
-
-
-*/
-
-}
-)
-
 
 app.listen(3001)
 console.log('starting')

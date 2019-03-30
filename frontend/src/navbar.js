@@ -10,6 +10,8 @@ class NavBar extends React.Component {
             style1:{},
             style2:{},
             style3: {},
+            style4:{},
+            style5: {},
             show: false, 
             showOwner: true, 
             ownerChecked: false, 
@@ -18,7 +20,9 @@ class NavBar extends React.Component {
        };
   }
 
-  componentDidMount() {
+    componentDidMount() {
+        console.log("hello")
+        
       if(this.props.location.pathname == '/rent')
           this.setState({style1: { textDecorationLine: "underline", color: "grey"}})
       if(this.props.location.pathname == '/submitRent') {
@@ -30,7 +34,11 @@ class NavBar extends React.Component {
           this.setState(prev => ({ ownerChecked: !prev.ownerChecked, showOwner: !prev.showOwner}))
       } 
       if(this.props.location.pathname == '/change')
-        this.setState({style3: { textDecorationLine: "underline", color: "grey"}})
+          this.setState({style3: { textDecorationLine: "underline", color: "grey"}})
+      if(this.props.location.pathname == '/delete') {
+          this.setState({style5: { textDecorationLine: "underline", color: "grey"}})
+          this.setState(prev => ({ ownerChecked: !prev.ownerChecked, showOwner: !prev.showOwner}))
+      }
   }
   rentEnterHandler = () => {
       this.setState({message:"Rent a property "})
@@ -72,6 +80,16 @@ class NavBar extends React.Component {
       this.setState({show:true})
   }
 
+  deleteEnterHandler = () => {
+      this.setState({message:"Delete a listed property "})
+      this.setState({show:true})
+  }
+
+  deleteLeaveHandler = () => {
+      this.setState({message:null})
+      this.setState({show:true})
+  }
+
   render() {
     return (
       <Navbar bg="dark" variant="dark">
@@ -82,9 +100,10 @@ class NavBar extends React.Component {
           <Nav.Link href="/change" style={this.state.style3} onMouseEnter={this.changeEnterHandler} onMouseLeave={this.changeLeaveHandler}>Change/Cancel</Nav.Link>
           <Nav.Link href="/submitProperty" hidden={this.state.showOwner} style={this.state.style4} onMouseEnter={this.propertyEnterHandler} onMouseLeave={this.propertyLeaveHandler}> Add Property </Nav.Link>
           <Nav.Link href="/submitRent" hidden={this.state.showOwner} style={this.state.style2} onMouseEnter={this.submitEnterHandler} onMouseLeave={this.submitLeaveHandler}>Submit Renting</Nav.Link>
+          <Nav.Link href="/delete" hidden={this.state.showOwner} style={this.state.style5} onMouseEnter={this.deleteEnterHandler} onMouseLeave={this.deleteLeaveHandler}>Delete Prop</Nav.Link>
         </Nav>
         <Alert placement="bottom" variant="info" style = {{ 
-            position: "absolute", left: "600px", top: "4px",
+            position: "absolute", left: "700px", top: "4px",
             borderColor: "grey",
             borderStyle: 'solid',
             borderTopLeftRadius: 20,
