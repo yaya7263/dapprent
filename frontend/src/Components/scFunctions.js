@@ -1,6 +1,7 @@
 import Web3 from 'web3';
 
-var web3 = new Web3(window.web3.currentProvider);
+//var web3 = new Web3(window.web3.currentProvider);
+const web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/<api key>"));
 
 const address = '0xcad323ee64975c11c4719e2df30ec8596f449570';
 

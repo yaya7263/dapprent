@@ -17,9 +17,24 @@ class ChangeListing extends React.Component {
             startDate: new Date(),
             endDate: new Date(),
             select: "cancel",
-            selectText: "Cancel a rent"
+            data: [],
+            useData: [], // this means the data will be used
+            selectText: "Cancel a rent",
+            property: "Monte Cristo"
         }
     }
+
+    componentDidMount() {
+        this.getDataFromDb()
+    }
+    getDataFromDb = () => {
+        fetch("http://localhost:3001/api/property")
+            .then(property => property.json())
+            .then(res => {
+                this.setState({ data: res.data, useData: res.data.filter(item => item.status === 1) });
+            }).then
+                ( ()=> console.log(this.state.useData))
+    };
     handlePropertySubmit = event => {
         event.preventDefault()
         var myStatus = myDict[this.state.select]
@@ -29,7 +44,7 @@ class ChangeListing extends React.Component {
         endDate = parseInt(MonToNum(endDate)) 
         var prop = {
             status: myStatus,
-            location: event.target.elements.location.value,
+            location: this.state.property,
             rentee: event.target.elements.firstName.value + event.target.elements.lastName.value,
             company: event.target.elements.company.value,
             price: parseInt(event.target.elements.price.value,10),
@@ -75,10 +90,33 @@ class ChangeListing extends React.Component {
             this.setState({selectText: "Cancel a rent"})
         }
         if (e.target.value == "change"){
-            this.setState({selectText: "Change rent date (Not in Processing)"})
+            this.setState({selectText: "Change rent date"})
         }
     }
-    
+
+    handleSelectPropChange = (event) => {
+        this.setState({
+            property: event.target.value
+        })
+    }
+    changeProps = () =>{
+        console.log(this.state.useData)
+        if (this.state.useData.length === 0) 
+            return (
+                <Form.Control as="select" id="availProps" onClick={this.handleSelectPropChange}>
+                    <option>"Empty"</option>
+                </Form.Control>
+            )
+        else {
+            var options = this.state.useData.map(myProp => <option> {myProp.location} </option> )
+            return (    
+                <Form.Control as="select" id="availProps" onClick={this.handleSelectPropChange}>
+                    <option>...</option>
+                    {options}
+                </Form.Control>
+           )
+        }
+    }
     render() {
         return (
             <Container style= {{ marginTop: 30 }}> 
@@ -110,16 +148,14 @@ class ChangeListing extends React.Component {
                          />
                         </Form.Group>
                         </Form.Row> 
-                        <Form.Row>
-                        <Form.Group as={Col} md="7" > 
-                            <Form.Control type="text" placeholder="Location" id="location" required />
-                            <Form.Control.Feedback type="invalid">
-                                Please enter a location.
-                            </Form.Control.Feedback>
+                        <Form.Row style={{width:610}}>
+                            <Form.Group as={Col} controlId="formGridState">
+                                <Form.Label>Properties</Form.Label>
+                        {this.changeProps()}
                             </Form.Group>
-                        </Form.Row>
-                        <Form.Row> 
-                        <Form.Group as={Col} md="3" style = {{marginLeft: 5 }}> 
+                            </Form.Row>
+                            <Form.Row> 
+                            <Form.Group as={Col} md="3" style = {{marginLeft: 5 }}> 
                                                     <Form.Row> 
                                                     <Form.Label> Start Date </Form.Label>
                                                     </Form.Row>
