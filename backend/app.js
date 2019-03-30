@@ -64,7 +64,7 @@ var abc = function () {
 
 	}
 }
-abc()
+//abc()
 //hello :)
 
 
@@ -110,6 +110,19 @@ app.post('/api/changeData', (req, res) => {
         return res.json({ success: true })
     });
 }
+)
+
+
+// can only update if status 0, the purpose of this is so that
+// 
+app.post('/api/updateLocal', (req, res) => {
+	console.log(req.body.update.location)
+	Property.findOneAndUpdate({ status:0, location: req.body.update.location }, req.body.update, (err, myProp) => {
+		if (err) return res.json({ success: false, error: err });
+		console.log(myProp)
+	    return res.json({ success: true })
+	});    
+	}
 )
 
 // ONLY updates if status 0 or 2

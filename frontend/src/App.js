@@ -127,8 +127,8 @@ class App extends Component {
           help: "haha"
         }
         await this.updateDB(currentProp)
-      }
-      this.getDataFromDb() 
+        this.getDataFromDb()
+      } 
     })
     
   }
