@@ -36,7 +36,8 @@ class App extends Component {
       firstName: "Ludwig",
       showConflict: false,
       lastName: "Wittgenstein",
-      processing: []
+      processing: [],
+      rentMessage: "empty"
     };
     this.handleCompanySubmit = this.handleCompanySubmit.bind(this);
 
@@ -44,6 +45,29 @@ class App extends Component {
 
   handleRentSubmit = event => {
     event.preventDefault(); 
+    let myProp = this.state.rentProperty
+    myProp.status = 2;
+    axios.post("http://localhost:3001/api/updateLocal", {
+      update: myProp
+    }).then(res => {
+      console.log(res.data)
+      if (res.data.success){
+        this.setState({rentMessage: "Please wait while your rent is being processed. ~15 seconds"},
+          () => // brings up the modal after setting the message
+            this.setState({showConflict: true})
+        )
+      }
+      else{
+        this.setState({rentMessage: "We are sorry. The property is not avail for rent"}, 
+          ()=>
+            this.setState({showConflict: true})
+        ) 
+        
+      }
+    }
+    );
+    this.handleClose()
+    /*
     this.state.rentProperty.rentee = this.state.firstName + this.state.lastName
     this.state.rentProperty.status = 1;  
 
@@ -56,6 +80,7 @@ class App extends Component {
    // this.state.processing.push(this.state.rentProperty.location)
     this.handleClose()
     //console.log(this.state.processing[0])
+    */
   }
 
 
@@ -81,13 +106,10 @@ class App extends Component {
     fetch("http://localhost:3001/api/property")
       .then(property => property.json())
       .then(res => this.setState({ data: res.data }))
-      .then(this.compareData)
 
   };
 
-  compareData = () => {
-    this.setState({showConflict: true})
-  }
+
 
   handleConflictClose = () => {
     this.setState({showConflict: false})
@@ -98,11 +120,11 @@ class App extends Component {
       <Modal style={{ top: '30%'}} show={this.state.showConflict} onHide={this.handleConflictClose} >
       <Modal.Dialog>
         <Modal.Header closeButton>
-          <Modal.Title>Info</Modal.Title>
+          <Modal.Title>Rent</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
-          <p>Please Refresh Page after Update</p>
+          <p>{this.state.rentMessage}</p>
         </Modal.Body>
 
       </Modal.Dialog>
