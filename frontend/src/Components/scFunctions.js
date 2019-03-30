@@ -205,12 +205,20 @@ const abi =[
 const myContract = window.web3.eth.contract(abi)
 var contractInstance = myContract.at(address)
 
+//let account = web3.eth.accounts.privateKeyToAccount('0x7297FCF507361463D92691E2E68B3C6F88CEE23244147F6FD62937C0B170A66C'); 
+//web3.personal.unlockAccount(account.address, account.privateKey, 200)
+/*
+web3.eth.defaultAccount = '0xDde2198546C886707971D580eDB1FfA8bC949e57';
+web3.personal.unlockAccount("0xDde2198546C886707971D580eDB1FfA8bC949e57", "0x7297FCF507361463D92691E2E68B3C6F88CEE23244147F6FD62937C0B170A66C", 600)
+.then(console.log('Account unlocked!'));
 // Connect to smart contract
+*/
+web3.eth.defaultAccount = '0xDde2198546C886707971D580eDB1FfA8bC949e57';
 
 const scRent = (prop, company) => { 
 	contractInstance.rentProperty(
 		prop.status, web3.fromAscii(prop.location), "0x79616e67", prop.price, prop.start, prop.end, web3.fromAscii(company),
-		{from: window.web3.eth.accounts[0], gas: 3000000, value: 100}, function(err, res){});
+		{from: web3.eth.defaultAccount, gas: 3000000, value: 100}, function(err, res){});
 }
 
 
