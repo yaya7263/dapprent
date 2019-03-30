@@ -7,8 +7,9 @@ import Web3 from 'web3';
 //web3.providers.HttpProvider("ropsten.infura.io/v3/d5986ef6af2c4fc789de177d15ba654c")
 //const web3 = new Web3(Web3.givenProvider)
 //const web3 = new Web3(new Web3.providers.HttpProvider(""));
-const web3 = new Web3(new Web3.providers.HttpProvider("ropsten.infura.io/TOKEN"))
-const address = '0xcad323ee64975c11c4719e2df30ec8596f449570';
+//const web3 = new Web3(new Web3.providers.HttpProvider("ropsten.infura.io/TOKEN"))
+const web3 = new Web3(window.web3.currentProvider);
+const address = '0x9bf492b3063db9f18c91c0edc855b5ac917976ff';
 
 const abi =[
 	{
@@ -210,8 +211,8 @@ const abi =[
 const myContract = window.web3.eth.contract(abi)
 var contractInstance = myContract.at(address)
 //let contractInstance = new web3.eth.Contract(abi, address);
-let account = web3.eth.accounts.privateKeyToAccount('0x7297FCF507361463D92691E2E68B3C6F88CEE23244147F6FD62937C0B170A66C'); 
-web3.personal.unlockAccount(account.address, account.privateKey, 200)
+//let account = web3.eth.accounts.privateKeyToAccount('0x7297FCF507361463D92691E2E68B3C6F88CEE23244147F6FD62937C0B170A66C'); 
+//web3.personal.unlockAccount(account.address, account.privateKey, 200)
 
 //web3.eth.defaultAccount = '0xDde2198546C886707971D580eDB1FfA8bC949e57';
 //web3.personal.unlockAccount("0xDde2198546C886707971D580eDB1FfA8bC949e57", "0x7297FCF507361463D92691E2E68B3C6F88CEE23244147F6FD62937C0B170A66C", 600)

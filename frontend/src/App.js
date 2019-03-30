@@ -7,7 +7,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import DatePicker from "react-datepicker";
 import { MonToNum, MonToStr } from './Components/monthConvert.js'
 import "react-datepicker/dist/react-datepicker.css";
-import { Jumbotron, Modal, Alert, Row, Label, Col, Panel, Form, Grid, Container, Image,  Button, ButtonToolbar, Table } from 'react-bootstrap/dist/react-bootstrap.js'
+import { Jumbotron, Modal, Row, Col, Form, Container, Image,  Button, } from 'react-bootstrap/dist/react-bootstrap.js'
 
 const Web3 = require('web3');
 const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
@@ -113,7 +113,7 @@ class App extends Component {
     return await scFunctions.getRents();
   } 
   getDataBC = () => {
-    this.getRentals().then((rentals) => {
+    this.getRentals().then(async (rentals) => {
       console.log(rentals)
       var lastIndex = rentals[0].length - 1
       for(let i = 0; i < rentals[0].length; i++){
@@ -126,7 +126,7 @@ class App extends Component {
           end: rentals[5][i].toNumber(),
           help: "haha"
         }
-        this.updateDB(currentProp)
+        await this.updateDB(currentProp)
       }
       this.getDataFromDb() 
     })
@@ -308,7 +308,7 @@ class App extends Component {
   }
 
   render() {
-    const { data } = this.state;
+    //const { data } = this.state;
     const show = this.state.show;
     return (
       <div>
@@ -335,7 +335,7 @@ class App extends Component {
         </div> 
 
 
-        {this.renderProperties(data)} 
+        {this.renderProperties(this.state.data)} 
 
       <rentModal />; 
 

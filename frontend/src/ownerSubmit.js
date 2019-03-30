@@ -15,12 +15,40 @@ class OwnerSubmit extends React.Component {
         this.state = {
             validated: false,
             startDate: new Date(),
-            endDate: new Date()
+            data: [],
+            useData: [], // this means the data will be used
+            endDate: new Date(),
+            property: "empty"
         }
     }
-    async submitDB(myProp) {
+    componentDidMount() {
+        this.getDataFromDb()
+    }
+    getDataFromDb = () => {
+        fetch("http://localhost:3001/api/property")
+            .then(property => property.json())
+            .then(res => {
+                this.setState({ data: res.data, useData: res.data.filter(item => item.status === 0) });
+            }).then
+                ( ()=> console.log(this.state.useData))
+    };
 
-
+    availProps = () =>{
+        if (this.state.useData.length == 0) 
+            return (
+                <Form.Control as="select" id="availProps" onClick={this.handleSelectChange}>
+                    <option>"Empty"</option>
+                </Form.Control>
+            )
+        else {
+            var options = this.state.useData.map(myProp => <option> {myProp.location} </option> )
+            return (    
+                <Form.Control as="select" id="availProps" onClick={this.handleSelectChange}>
+                    <option>...</option>
+                    {options}
+                </Form.Control>
+                )
+        }
     }
     handlePropertySubmit = event => {
         event.preventDefault()
@@ -31,13 +59,14 @@ class OwnerSubmit extends React.Component {
         endDate = parseInt(MonToNum(endDate)) 
         var prop = {
             status: 2,
-            location: event.target.elements.location.value,
+            location: this.state.property,
             rentee: event.target.elements.firstName.value + event.target.elements.lastName.value,
             company: event.target.elements.company.value,
             price: parseInt(event.target.elements.price.value,10),
             start: startDate,
             end: endDate
         }
+        console.log(this.state.property)
         if (event.target.checkValidity() === false) {
             event.stopPropagation();
         }
@@ -45,13 +74,18 @@ class OwnerSubmit extends React.Component {
         if (event.target.checkValidity() === true) {
             axios.post("http://localhost:3001/api/updateData", {
                 update: prop
-            }).then((result,oreo) => {
+            }).then((result) => {
                 console.log(result.data)
-                console.log(oreo)
                 prop.status = 1;
                 scRent(prop, prop.location)
             })
         }
+    }
+
+    handleSelectChange = (event) => {
+        this.setState({
+            property: event.target.value
+        })
     }
 
    handleStartDateChange = date => {
@@ -89,12 +123,10 @@ class OwnerSubmit extends React.Component {
                              />
                         </Form.Group>
                     </Form.Row> 
-                    <Form.Row>
-                        <Form.Group as={Col} md="7" > 
-                            <Form.Control type="text" placeholder="Location" id="location" required />
-                            <Form.Control.Feedback type="invalid">
-                                Please enter a location.
-                            </Form.Control.Feedback>
+                    <Form.Row style={{width:610}}>
+                            <Form.Group as={Col} controlId="formGridState">
+                                <Form.Label>Properties</Form.Label>
+                            {this.availProps()}
                             </Form.Group>
                     </Form.Row>
                     <Form.Row> 
