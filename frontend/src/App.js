@@ -8,6 +8,7 @@ import DatePicker from "react-datepicker";
 import { MonToNum, MonToStr } from './Components/monthConvert.js'
 import "react-datepicker/dist/react-datepicker.css";
 import { Jumbotron, Modal, Row, Col, Form, Container, Image,  Button, } from 'react-bootstrap/dist/react-bootstrap.js'
+import { scRent } from "./Components/scFunctions";
 
 const Web3 = require('web3');
 const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
@@ -56,6 +57,7 @@ class App extends Component {
           () => // brings up the modal after setting the message
             this.setState({showConflict: true})
         )
+        scRent(myProp, this.state.company, 1) 
       }
       else{
         this.setState({rentMessage: "We are sorry. The property is not avail for rent"}, 

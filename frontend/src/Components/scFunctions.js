@@ -221,9 +221,16 @@ var contractInstance = myContract.at(address)
 
 //web3.eth.defaultAccount = '0xDde2198546C886707971D580eDB1FfA8bC949e57';
 
-const scRent = (prop, company) => { 
+const scRent = (prop, company, status) => { 
+	var myStatus = 1;
+	if (status == null) {
+		myStatus = prop.status
+		console.log("null status passed in")
+	} else {
+		myStatus = status; 
+	}
 	contractInstance.rentProperty(
-		prop.status, web3.fromAscii(prop.location), "0x79616e67", prop.price, prop.start, prop.end, web3.fromAscii(company),
+		myStatus, web3.fromAscii(prop.location), "0x79616e67", prop.price, prop.start, prop.end, web3.fromAscii(company),
 		{from: web3.eth.defaultAccount, gas: 3000000, value: 100}, function(err, res){});
 }
 

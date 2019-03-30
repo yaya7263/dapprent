@@ -64,7 +64,7 @@ var abc = function () {
 
 	}
 }
-//abc()
+abc()
 //hello :)
 
 
@@ -104,6 +104,7 @@ app.post('/api/property', (req, res) => {
 // Changes or Cancels a property. The different between this and updateData is that
 // It can override everything
 app.post('/api/changeData', (req, res) => {
+
     console.log(req.body.update.location)
     Property.findOneAndUpdate({ location: req.body.update.location }, req.body.update, err => {
         if (err) return res.json({ success: false, error: err });
@@ -117,9 +118,11 @@ app.post('/api/changeData', (req, res) => {
 // race conditions when people access the same site at once. 
 app.post('/api/updateLocal', (req, res) => {
 	console.log(req.body.update.location)
+	console.log(req.body.update.status)
 	Property.findOneAndUpdate({ status:0, location: req.body.update.location }, req.body.update, (err, myProp) => {
 		if (err) return res.json({ success: false, error: err });
-		console.log(myProp)
+		//console.log(myProp)
+		console.log(req.body.update.status)
 		if (myProp == null ) //null means not found
 			return res.json({ success: false })
 		else 
