@@ -150,9 +150,38 @@ class App extends Component {
           end: rentals[5][i].toNumber(),
           help: "haha"
         }
-        await this.updateDB(currentProp)
-        this.getDataFromDb()
-      } 
+        
+        if (currentProp.status == 6) { //delete
+          await axios.delete("http://localhost:3001/api/delete", {
+              data: {property: currentProp} 
+          })
+        }
+        if (currentProp.status == 5) { //add, would only be created if not in database
+          currentProp.status = 0; 
+          currentProp.image  = "./images/99.jpg"
+          await axios.post("http://localhost:3001/api/property", {
+            property: currentProp
+          }) 
+        }
+        if (currentProp.status == 4) { //change
+          currentProp.status = 1
+          await axios.post("http://localhost:3001/api/changeData", {
+            update: currentProp
+          })
+        }
+        if (currentProp.status == 3) { //cancel
+          currentProp.status = 0
+          await axios.post("http://localhost:3001/api/changeData", {
+            update: currentProp
+          })
+        }
+        if (currentProp.status == 1) {
+          await this.updateDB(currentProp)
+        }
+
+    //    await this.updateDB(currentProp)
+        this.getDataFromDb() 
+      }
     })
     
   }
@@ -240,7 +269,7 @@ class App extends Component {
     var properties = []
     var propRow = []
     data.forEach((property,index) => {
-      propRow.push(<Col xs={{ size:3, offset: .5}}> 
+      propRow.push(<Col md={{ size:3, offset: 0.5}}> 
         <Jumbotron style = {{ 
           borderColor: "grey",
           borderStyle: 'solid',
@@ -266,8 +295,15 @@ class App extends Component {
         properties.push(<Row>{ propRow }</Row>)
         propRow = []
       }
-
     })
+    if (propRow.length == 1){ // need to fill out the mpties
+      propRow.push(<Col md={{ size:3, offset: 0.5}}></Col>)
+      propRow.push(<Col md={{ size:3, offset: 0.5}}></Col>)
+    } 
+    if (propRow.length == 2){
+      propRow.push(<Col md={{ size:3, offset: 0.5}}></Col>)
+    } 
+    properties.push(<Row>{ propRow }</Row>) // any remaining props
     return (
       <Container>
         {properties}
@@ -285,7 +321,7 @@ class App extends Component {
   showModal = () => {
     return (
         <Modal style={{ top: '30%'}} show={this.state.show} onHide={this.handleClose}>
-          <Modal.Header closeButton style={{backgroundImage: 'url(https://www.pictorem.com/collection/900_1994202HighRes.jpg)'}}>
+          <Modal.Header closeButton style={{backgroundImage: 'url(https://media1.tenor.com/images/318cab8d6fecd9181284239fffadf69e/tenor.gif?itemid=12316453)'}}>
             <Container >
                   {this.state.rentProperty.location} 
             </Container> 
@@ -335,7 +371,7 @@ class App extends Component {
     //const { data } = this.state;
     const show = this.state.show;
     return (
-      <div>
+      <div style={{backgroundImage: 'url(' + require('./images/redlantern/5.jpg') + ')'}}>
         {this.showModal()} 
         {this.showConflictModal()} 
         <div style={{ padding: "10px" }}>
@@ -347,7 +383,7 @@ class App extends Component {
           </form>
         </div>
         <div> 
-          <h2> {this.state.company} </h2> 
+          <h1 style={{color:'grey'}}> <b>{this.state.company} </b></h1> 
         </div>
         <div>
           <button 

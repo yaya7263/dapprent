@@ -64,7 +64,7 @@ var abc = function () {
 
 	}
 }
-abc()
+//abc()
 //hello :)
 
 
@@ -91,14 +91,41 @@ app.delete('/api/delete', (req, res) => {
 
 //creates a property
 app.post('/api/property', (req, res) => {
+	Property.find({ location: req.body.property.location }, (err, Propertys) => {
+		if(err){
+			throw err;
+		}
+		console.log(Propertys)
+		if (Propertys.length == 0 ) // only create if null 
+		{
+			Property.create(req.body.property, (err,Propertyz) => {
+				if(err){
+					throw err;
+				}
+			})
+		}
+		res.json({ data: Propertys});
+	})
+	//upsert = true means only create if not found. 
+	/*
+	Property.findOneAndUpdate({ location: req.body.property.location }, req.body.property, { upsert: true }, (err, myProp) => {
+		if (err) return res.json({ success: false, error: err });
+		//console.log(myProp)
+		//console.log(req.body.update.status)
+		return res.json({ success: true })
+	})
+	*/
+})
+	/*
     var prop = req.body.property
     Property.create(prop, (err,Propertyz) => {
         if(err){
             throw err;
         }
         res.json(Propertyz)
-    })
-})
+	})
+	*/
+
 
 
 // Changes or Cancels a property. The different between this and updateData is that

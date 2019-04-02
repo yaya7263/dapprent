@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { Text, Carousel, Jumbotron, Modal, Alert, Row, Label, Col, Panel, Form, Grid, Container, Image,  Button, ButtonToolbar, Table } from 'react-bootstrap/dist/react-bootstrap.js'
+import { Carousel,  Button } from 'react-bootstrap/dist/react-bootstrap.js'
 
 //help from https://react-bootstrap.github.io/components/carousel/
 class ControlledCarousel extends React.Component {
@@ -82,7 +82,7 @@ class ControlledCarousel extends React.Component {
           />
         </Carousel.Item>
       </Carousel>
-      <div style={{position: "absolute", textAlign: "center", top: "50%", left:"39%"}}> 
+      <div style={{position: "absolute", textAlign: "center", top: "50%", left:"35%"}}> 
          <Button
          	    style = {{
                           width: 300,
@@ -101,7 +101,7 @@ class ControlledCarousel extends React.Component {
             <h1 style={{ color: 'lightblue' }}> BookAway </h1> 
         </Link> 
         </Button>
-        <h3><i> Book your dream vacation today </i> </h3> 
+        <h3 style={{ color: 'lightblue' }}><i> Book your dream vacation today </i> </h3> 
     </div> 
     </div> 
     );

@@ -1,7 +1,7 @@
 import React from "react";
-import { Container, Button, Col, Form } from 'react-bootstrap/dist/react-bootstrap.js'
+import { Container, Modal, Button, Col, Form } from 'react-bootstrap/dist/react-bootstrap.js'
 import axios from "axios";
-
+import { scRent } from './Components/scFunctions.js'
 // help from https://react-bootstrap.github.io/components/forms/
 // THIS IS FOR ADDING A PROP
 
@@ -9,39 +9,68 @@ class submitProperty extends React.Component {
     constructor(props) {
         super(props); 
         this.state = {
-            validated: false
+            validated: false,
+            showMod: false
         }
     }
 
+    handleClose = () => {
+        this.setState({showMod: false})
+    }
+    
+    showModal = () => {
+        return (
+          <Modal style={{ top: '30%'}} show={this.state.showMod} onHide={this.handleClose}  >
+          <Modal.Dialog>
+            <Modal.Header closeButton>
+              <Modal.Title>Rent</Modal.Title>
+            </Modal.Header>
+    
+            <Modal.Body>
+              <p>"Hello World"</p>
+            </Modal.Body>
+    
+          </Modal.Dialog>
+          </Modal> )
+      }
+
     handlePropertySubmit = event => {
         event.preventDefault()
- 
         var prop = {
-            status: 1,
+            status: 0,
             location: event.target.elements.location.value,
             rentee: "empty",
             company: "empty",
             price: parseInt(event.target.elements.price.value,10),
             start: 0,
-            end: 0
+            end: 0,
+            image:"./images/99.jpg"
         }
         if (event.target.checkValidity() === false) {
             event.stopPropagation();
         }
+        var checked = event.target.elements.addAll.checked
         this.setState({ validated: true }); 
         if (event.target.checkValidity() === true) {
+            this.setState({showMod:true})
             axios.post("http://localhost:3001/api/property", {
                 property: prop
-            });
+            }).then(() => {
+                if(checked) {
+                    scRent(prop, prop.company, 5)
+                }
+            })
         }
     }
+
     render() {
         return (
-            <Container style= {{ marginTop: 30 }}> 
-                <Form noValidate validated={this.state.validated} onSubmit={e=> this.handlePropertySubmit(e)}>
+            <Container style= {{ marginTop: 30, position: 'relative'}}> 
+            {this.showModal()} 
+                <Form noValidate validated={this.state.validated} onSubmit={e=> this.handlePropertySubmit(e)} >
                     <Form.Row>
                         <Form.Group as={Col} md="3" style={{marginRight:50}}>
-                            <Form.Label>Rentor's First Name</Form.Label>
+                            <Form.Label>Owner's First Name</Form.Label>
                             <Form.Control
                             type="text"
                             placeholder="Ludwig"
@@ -71,7 +100,8 @@ class submitProperty extends React.Component {
                         </Form.Control.Feedback>
                         </Form.Group> 
                     </Form.Row>
-                    <Button type="submit">Submit Property</Button>
+                    <Form.Check type="checkbox" id="addAll" label="Add to all sites" style={{marginBottom:10}}/>
+                    <Button type="submit" variant="success">Add Property</Button>
                 </Form> 
 		    </Container>
              )

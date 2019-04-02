@@ -26,11 +26,11 @@ contract Homeaway {
         transactions = 0; 
     }
     
-    function rentProperty(bytes32 _location, bytes32 _rentee, uint _price, uint _start, uint _end, bytes32 _company) public payable {
+    function rentProperty(uint _status, bytes32 _location, bytes32 _rentee, uint _price, uint _start, uint _end, bytes32 _company) public payable {
         transactions++; 
         uint currentIndex = rentals.length; 
         indexes[_location] = currentIndex; // so for first location, it will be recorded at index 0. 
-        rentals.push(Rental(1, _location, _rentee, _price, _start, _end, _company));
+        rentals.push(Rental(_status, _location, _rentee, _price, _start, _end, _company));
     }
     
     //get recent rentals from the last time they retrieved rentals until now. _index represents the FIRST transaction they need, rather than last transaction received. 
