@@ -36,8 +36,11 @@ class App extends Component {
       endDate: new Date(),
       firstName: "Ludwig",
       showConflict: false,
+      showProcessing: false,
       lastName: "Wittgenstein",
       processing: [],
+      successful: [],
+      unsuccessful: [],
       rentMessage: "empty"
     };
     this.handleCompanySubmit = this.handleCompanySubmit.bind(this);
@@ -48,6 +51,7 @@ class App extends Component {
     event.preventDefault(); 
     let myProp = this.state.rentProperty
     myProp.status = 2;
+    this.setState({ processing: [...this.state.processing, myProp.location] }, () => console.log(this.state.processing)) // add location to processing 
     axios.post("http://localhost:3001/api/updateLocal", {
       update: myProp
     }).then(res => {
@@ -117,6 +121,29 @@ class App extends Component {
     this.setState({showConflict: false})
   }
 
+  showProcessingModal = () => {
+    console.log(this.state.processing)
+    return (
+      <Modal style={{ top: '30%'}} show={this.state.showProcessing} onHide={()=> this.setState({showProcessing: false})} >
+      <Modal.Dialog>
+        <Modal.Header closeButton>
+          <Modal.Title>Current Status</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <h1> Processing </h1> 
+          <p>{this.state.processing}</p>
+          <h1> Successful </h1> 
+          <p>{this.state.successful}</p>
+          <h1> Unsuccessful </h1> 
+          <p>{this.state.unsuccessful}</p>
+        </Modal.Body>
+
+      </Modal.Dialog>
+      </Modal> )
+  }
+
+
   showConflictModal = () => {
     return (
       <Modal style={{ top: '30%'}} show={this.state.showConflict} onHide={this.handleConflictClose} >
@@ -150,7 +177,20 @@ class App extends Component {
           end: rentals[5][i].toNumber(),
           help: "haha"
         }
-        
+
+        // Processing is a notification center for current component and whether or not transactions succeeded
+        if (currentProp.status == 1) {
+          let index = this.state.processing.indexOf(currentProp.location) // check if in record books
+          if (index > -1) { // not gonna do anything if not in record
+            this.setState({ processing: this.state.processing.splice(index,1)}) // remove from list so not rerun
+            if (this.state.company == currentProp.company) {   
+              this.setState({successful: [...this.state.successful, currentProp.location]})
+            }
+            else {
+              this.setState({unsuccessful: [...this.state.unsuccessful, currentProp.location]})
+            }
+          }
+        }
         if (currentProp.status == 6) { //delete
           await axios.delete("http://localhost:3001/api/delete", {
               data: {property: currentProp} 
@@ -372,6 +412,8 @@ class App extends Component {
     const show = this.state.show;
     return (
       <div style={{backgroundImage: 'url(' + require('./images/redlantern/5.jpg') + ')'}}>
+        <Button onClick={()=>this.setState({showProcessing: true})} style={{position: 'absolute', right:0}}> Show Record </Button>
+        {this.showProcessingModal()}
         {this.showModal()} 
         {this.showConflictModal()} 
         <div style={{ padding: "10px" }}>

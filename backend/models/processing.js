@@ -5,23 +5,17 @@ var propertySchema = mongoose.Schema({
         type: String,
         required: true
     },
-    rentee:{
+    firstName:{
         type: String
     },
+    lastName:{
+        type:String
+    },
     company:{
-        type:String
+        type: String
     },
-    price:{
-        type: Number
-    },
-    start:{
+    status:{
         type:Number
-    },
-    end:{
-        type:Number
-    },
-    image:{
-        type:String
     }
 })
 
