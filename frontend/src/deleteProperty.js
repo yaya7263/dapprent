@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Container, Col, Form } from 'react-bootstrap/dist/react-bootstrap.js'
+import { Button, Modal, Container, Col, Form } from 'react-bootstrap/dist/react-bootstrap.js'
 import axios from "axios";
 import { scRent } from './Components/scFunctions.js'
 
@@ -12,7 +12,8 @@ class deleteProperty extends React.Component {
             validated: false,
             data: [],
             useData: [], // this means the data will be used
-            property: "empty"
+            property: "empty",
+            showModal: false
         }
     }
     componentDidMount() {
@@ -76,11 +77,29 @@ class deleteProperty extends React.Component {
                 console.log("just off of this site")
             }
         }).then(this.getDataFromDb)
+        this.setState({showModal: true})
             
+    }
+
+    showModal = () => {
+        return (
+          <Modal style={{ top: '30%'}} show={this.state.showModal} onHide={()=> this.setState({showModal: false})} >
+          <Modal.Dialog>
+            <Modal.Header closeButton>
+              <Modal.Title>Success</Modal.Title>
+            </Modal.Header>
+    
+            <Modal.Body>
+              <p>The deletion has being processed</p>
+            </Modal.Body>
+    
+          </Modal.Dialog>
+          </Modal> )
     }
     render() {
         return (
         <Container>
+            {this.showModal()}
             <Form onSubmit={e=> this.handlePropertySubmit(e)} style={{marginTop:50}}>
             <Form.Row>
                 <Form.Group as={Col} md="3" style={{marginRight:50}}>

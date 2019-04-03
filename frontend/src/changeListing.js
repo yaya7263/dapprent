@@ -2,7 +2,7 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import { MonToNum, MonToStr } from './Components/monthConvert.js'
 import "react-datepicker/dist/react-datepicker.css";
-import { Container, Button, Col, Form } from 'react-bootstrap/dist/react-bootstrap.js'
+import { Container, Button, Col, Form, Modal } from 'react-bootstrap/dist/react-bootstrap.js'
 import axios from "axios";
 import { scRent }  from "./Components/scFunctions"; 
 var moment = require('moment');
@@ -20,7 +20,8 @@ class ChangeListing extends React.Component {
             data: [],
             useData: [], // this means the data will be used
             selectText: "Cancel a rent",
-            property: "Monte Cristo"
+            property: "Monte Cristo",
+            showModa: false
         }
     }
 
@@ -69,6 +70,7 @@ class ChangeListing extends React.Component {
                 console.log(result.data)
                 scRent(prop, prop.location)
             })
+            this.setState({showModal: true})
         }
     }
 
@@ -117,9 +119,34 @@ class ChangeListing extends React.Component {
            )
         }
     }
+
+    showModal = () => {
+        let myMessage = "" 
+        if(this.state.select="cancel") {
+            myMessage = "The cancelation has being processed"
+        }
+        else {
+            myMessage = "The date change has being processed"
+        } 
+        return (
+          <Modal style={{ top: '30%'}} show={this.state.showModal} onHide={()=> this.setState({showModal: false})} >
+          <Modal.Dialog>
+            <Modal.Header closeButton>
+              <Modal.Title>Success</Modal.Title>
+            </Modal.Header>
+    
+            <Modal.Body>
+              <p>{myMessage}</p>
+            </Modal.Body>
+    
+          </Modal.Dialog>
+          </Modal> )
+    }
+
     render() {
         return (
             <Container style= {{ marginTop: 30 }}> 
+                {this.showModal()}
                 <Form noValidate validated={this.state.validated} onSubmit={e=> this.handlePropertySubmit(e)}>
                     <Form.Row>  
                         <h1 style={{marginRight:98, position:"relative", top:-3}}> {this.state.selectText} </h1> 

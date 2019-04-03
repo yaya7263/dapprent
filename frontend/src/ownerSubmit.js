@@ -2,7 +2,7 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import { MonToNum, MonToStr } from './Components/monthConvert.js'
 import "react-datepicker/dist/react-datepicker.css";
-import { Container, Button, Col, Form } from 'react-bootstrap/dist/react-bootstrap.js'
+import { Container, Button, Col, Form, Modal } from 'react-bootstrap/dist/react-bootstrap.js'
 import axios from "axios";
 import { scRent }  from "./Components/scFunctions"; 
 var moment = require('moment');
@@ -18,7 +18,8 @@ class OwnerSubmit extends React.Component {
             data: [],
             useData: [], // this means the data will be used
             endDate: new Date(),
-            property: "empty"
+            property: "empty",
+            showModal: false
         }
     }
     componentDidMount() {
@@ -79,6 +80,7 @@ class OwnerSubmit extends React.Component {
                 prop.status = 1;
                 scRent(prop, prop.location)
             })
+            this.setState({showModal: true})
         }
     }
 
@@ -100,9 +102,26 @@ class OwnerSubmit extends React.Component {
         });
 
     }
+
+    showModal = () => {
+        return (
+          <Modal style={{ top: '30%'}} show={this.state.showModal} onHide={()=> this.setState({showModal: false})} >
+          <Modal.Dialog>
+            <Modal.Header closeButton>
+              <Modal.Title>Success</Modal.Title>
+            </Modal.Header>
+    
+            <Modal.Body>
+              <p>The property submission is being processed</p>
+            </Modal.Body>
+    
+          </Modal.Dialog>
+          </Modal> )
+    }
     render() {
         return (
             <Container style= {{ marginTop: 30 }}> 
+                {this.showModal()}
                 <Form noValidate validated={this.state.validated} onSubmit={e=> this.handlePropertySubmit(e)}>
                     <Form.Row>
                         <Form.Group as={Col} md="3" style={{marginRight:50}}>

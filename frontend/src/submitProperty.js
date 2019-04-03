@@ -10,29 +10,10 @@ class submitProperty extends React.Component {
         super(props); 
         this.state = {
             validated: false,
-            showMod: false
+            showModal: false
         }
     }
 
-    handleClose = () => {
-        this.setState({showMod: false})
-    }
-    
-    showModal = () => {
-        return (
-          <Modal style={{ top: '30%'}} show={this.state.showMod} onHide={this.handleClose}  >
-          <Modal.Dialog>
-            <Modal.Header closeButton>
-              <Modal.Title>Rent</Modal.Title>
-            </Modal.Header>
-    
-            <Modal.Body>
-              <p>"Hello World"</p>
-            </Modal.Body>
-    
-          </Modal.Dialog>
-          </Modal> )
-      }
 
     handlePropertySubmit = event => {
         event.preventDefault()
@@ -60,9 +41,24 @@ class submitProperty extends React.Component {
                     scRent(prop, prop.company, 5)
                 }
             })
+            this.setState({showModal: true})
         }
     }
-
+    showModal = () => {
+        return (
+          <Modal style={{ top: '30%'}} show={this.state.showModal} onHide={()=> this.setState({showModal: false})} >
+          <Modal.Dialog>
+            <Modal.Header closeButton>
+              <Modal.Title>Success</Modal.Title>
+            </Modal.Header>
+    
+            <Modal.Body>
+              <p>The property has being added</p>
+            </Modal.Body>
+    
+          </Modal.Dialog>
+          </Modal> )
+    }
     render() {
         return (
             <Container style= {{ marginTop: 30, position: 'relative'}}> 

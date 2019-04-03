@@ -127,10 +127,11 @@ class App extends Component {
       <Modal style={{ top: '30%'}} show={this.state.showProcessing} onHide={()=> this.setState({showProcessing: false})} >
       <Modal.Dialog>
         <Modal.Header closeButton>
-          <Modal.Title>Current Status</Modal.Title>
+          <Modal.Title>{this.state.firstName} {this.state.lastName}: </Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
+          <h2> refreshing or switching pages removes this status info.. </h2> 
           <h1> Processing </h1> 
           <p>{this.state.processing}</p>
           <h1> Successful </h1> 
@@ -250,9 +251,7 @@ class App extends Component {
 
   handleUpdateProperty = () => {
     this.getDataBC(); 
-    console.log(this.state.data[4].rentee)
-    console.log(this.state.data[4].company)
-    console.log(this.state.data[4].status)
+
 //db.inventory.find( { status: "D" } )
   }
     
