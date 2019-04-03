@@ -9,7 +9,7 @@ import Web3 from 'web3';
 //const web3 = new Web3(new Web3.providers.HttpProvider(""));
 //const web3 = new Web3(new Web3.providers.HttpProvider("ropsten.infura.io/TOKEN"))
 const web3 = new Web3(window.web3.currentProvider);
-const address = '0x203acd5896f9ef48102a251f38e9c504a5592e98';
+const address = '0x1b7b1f618cdd127f2c33cdd51943aba389545f94';
 
 const abi =[
 	{

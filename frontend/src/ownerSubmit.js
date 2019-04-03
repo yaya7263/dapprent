@@ -56,6 +56,7 @@ class OwnerSubmit extends React.Component {
 
         let startDate = moment(this.state.startDate).format('MMMDDYYYY');
         startDate = parseInt(MonToNum(startDate)) 
+        console.log(event.target.elements.company.value)
         let endDate = moment(this.state.endDate).format('MMMDDYYYY');
         endDate = parseInt(MonToNum(endDate)) 
         var prop = {
@@ -73,12 +74,13 @@ class OwnerSubmit extends React.Component {
         }
         this.setState({ validated: true }); 
         if (event.target.checkValidity() === true) {
+            console.log("bumitting)")
             axios.post("http://localhost:3001/api/updateData", {
                 update: prop
             }).then((result) => {
                 console.log(result.data)
                 prop.status = 1;
-                scRent(prop, prop.location)
+                scRent(prop, prop.company)
             })
             this.setState({showModal: true})
         }

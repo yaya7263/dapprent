@@ -64,7 +64,7 @@ var abc = function () {
 
 	}
 }
-//abc()
+abc()
 //hello :)
 
 

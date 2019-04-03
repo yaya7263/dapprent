@@ -16,7 +16,7 @@ class ChangeListing extends React.Component {
             validated: false,
             startDate: new Date(),
             endDate: new Date(),
-            select: "cancel",
+            selection: "yang",
             data: [],
             useData: [], // this means the data will be used
             selectText: "Cancel a rent",
@@ -33,12 +33,12 @@ class ChangeListing extends React.Component {
             .then(property => property.json())
             .then(res => {
                 this.setState({ data: res.data, useData: res.data.filter(item => item.status === 1) });
-            }).then
-                ( ()=> console.log(this.state.useData))
+            })
     };
     handlePropertySubmit = event => {
         event.preventDefault()
-        var myStatus = myDict[this.state.select]
+        console.log(this.state.selection)
+        var myStatus = myDict[this.state.selection]
         let startDate = moment(this.state.startDate).format('MMMDDYYYY');
         startDate = parseInt(MonToNum(startDate)) 
         let endDate = moment(this.state.endDate).format('MMMDDYYYY');
@@ -58,6 +58,7 @@ class ChangeListing extends React.Component {
         this.setState({ validated: true }); 
         
         if (event.target.checkValidity() === true) {
+            console.log(myStatus)
             axios.post("http://localhost:3001/api/changeData", {
                 update: prop
             }).then((result) => {
@@ -67,7 +68,6 @@ class ChangeListing extends React.Component {
                 if (myStatus == 1){
                     prop.status = 4
                 }
-                console.log(result.data)
                 scRent(prop, prop.location)
             })
             this.setState({showModal: true})
@@ -87,12 +87,15 @@ class ChangeListing extends React.Component {
     }
 
     handleSelectChange = e => {
-        this.setState({select: e.target.value})
-        if (e.target.value == "cancel"){
+        console.log(this.state.selection)
+        if (e.target.value == "cancelz"){
+            console.log("hello")
             this.setState({selectText: "Cancel a rent"})
+            this.setState({selection: "bob"})
         }
-        if (e.target.value == "change"){
+        if (e.target.value == "changez"){
             this.setState({selectText: "Change rent date"})
+            this.setState({selection: "sdsd"}, () => console.log(this.state.selection))
         }
     }
 
@@ -102,7 +105,6 @@ class ChangeListing extends React.Component {
         })
     }
     changeProps = () =>{
-        console.log(this.state.useData)
         if (this.state.useData.length === 0) 
             return (
                 <Form.Control as="select" id="availProps" onClick={this.handleSelectPropChange}>
@@ -122,7 +124,7 @@ class ChangeListing extends React.Component {
 
     showModal = () => {
         let myMessage = "" 
-        if(this.state.select="cancel") {
+        if(this.state.selection="cancel") {
             myMessage = "The cancelation has being processed"
         }
         else {
@@ -150,9 +152,9 @@ class ChangeListing extends React.Component {
                 <Form noValidate validated={this.state.validated} onSubmit={e=> this.handlePropertySubmit(e)}>
                     <Form.Row>  
                         <h1 style={{marginRight:98, position:"relative", top:-3}}> {this.state.selectText} </h1> 
-                        <Form.Control as="select" onChange={this.handleSelectChange} value={this.state.select} style={{width:275}}>
-                          <option value="cancel">Cancel</option>
-                          <option value="change">Change</option>
+                        <Form.Control as="select" onChange={this.handleSelectChange} style={{width:275}}>
+                          <option value="cancelz">Cancel</option>
+                          <option value="changez">Change</option>
                         </Form.Control>
                     </Form.Row> 
                     <hr/>

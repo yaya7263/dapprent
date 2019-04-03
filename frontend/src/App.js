@@ -94,10 +94,10 @@ class App extends Component {
   componentDidMount() {
     console.log("Component did mount")
     this.getDataFromDb();
-    if (!this.state.intervalIsSet) {
-      let interval = setInterval(this.getDataFromDb, 99100000);
-      this.setState({ intervalIsSet: interval });
-    }
+   // if (!this.state.intervalIsSet) {
+    //  let interval = setInterval(this.getDataBC, 115000);
+     // this.setState({ intervalIsSet: interval });
+   // }
   }
 
 
@@ -165,8 +165,8 @@ class App extends Component {
     return await scFunctions.getRents();
   } 
   getDataBC = () => {
+    console.log("updating from BC")
     this.getRentals().then(async (rentals) => {
-      console.log(rentals)
       var lastIndex = rentals[0].length - 1
       for(let i = 0; i < rentals[0].length; i++){
         let currentProp = {
@@ -217,7 +217,9 @@ class App extends Component {
           })
         }
         if (currentProp.status == 1) {
-          await this.updateDB(currentProp)
+          await axios.post("http://localhost:3001/api/updateData", {
+            update: currentProp
+          });
         }
 
     //    await this.updateDB(currentProp)
