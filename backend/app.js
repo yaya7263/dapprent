@@ -3,7 +3,7 @@ var app = express();
 var bodyParser = require('body-parser')
 var mongoose = require('mongoose')
 var cors = require('cors');
-
+//const scFunctions = require("./scFunctions"); 
 // cors help from https://stackoverflow.com/questions/50873764/cross-origin-read-blocking-corb
 
 app.use(bodyParser.json());
@@ -195,6 +195,27 @@ app.post('/api/updateData', (req, res) => {
     
 	}
 )
+/*
+scUpdate = async () => {
+	let myUpdates = await scFunctions.getRents();
 
+}
+
+
+myRent = () => {
+	var prop = {
+		status: 0,
+		location: "Link",
+		rentee: "empty",
+		company: "empty",
+		price: 123,
+		start: 0,
+		end: 0,
+		image:"./images/99.jpg"
+	}
+	scFunctions.scRent(prop, prop.company, 5)
+}
+myRent()
+*/
 app.listen(3001)
 console.log('starting')
