@@ -94,10 +94,10 @@ class App extends Component {
   componentDidMount() {
     console.log("Component did mount")
     this.getDataFromDb();
-   // if (!this.state.intervalIsSet) {
-    //  let interval = setInterval(this.getDataBC, 115000);
-     // this.setState({ intervalIsSet: interval });
-   // }
+    if (!this.state.intervalIsSet) {
+      let interval = setInterval(this.getDataBC, 5000);
+      this.setState({ intervalIsSet: interval });
+    }
   }
 
 

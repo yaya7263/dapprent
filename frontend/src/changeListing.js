@@ -16,12 +16,13 @@ class ChangeListing extends React.Component {
             validated: false,
             startDate: new Date(),
             endDate: new Date(),
-            selection: "yang",
+            selection: "cancel",
             data: [],
             useData: [], // this means the data will be used
             selectText: "Cancel a rent",
             property: "Monte Cristo",
-            showModa: false
+            showModal: false,
+            mySelection: "cancel"
         }
     }
 
@@ -38,7 +39,7 @@ class ChangeListing extends React.Component {
     handlePropertySubmit = event => {
         event.preventDefault()
         console.log(this.state.selection)
-        var myStatus = myDict[this.state.selection]
+        var myStatus = myDict[this.state.mySelection]
         let startDate = moment(this.state.startDate).format('MMMDDYYYY');
         startDate = parseInt(MonToNum(startDate)) 
         let endDate = moment(this.state.endDate).format('MMMDDYYYY');
@@ -87,15 +88,17 @@ class ChangeListing extends React.Component {
     }
 
     handleSelectChange = e => {
-        console.log(this.state.selection)
+        //console.log(this.state.selection)
         if (e.target.value == "cancelz"){
             console.log("hello")
             this.setState({selectText: "Cancel a rent"})
             this.setState({selection: "bob"})
+            this.setState({mySelection: "cancel"  }, () => console.log(this.state.mySelection))
         }
         if (e.target.value == "changez"){
             this.setState({selectText: "Change rent date"})
-            this.setState({selection: "sdsd"}, () => console.log(this.state.selection))
+            this.setState({selection: "sdsd"})
+            this.setState({mySelection: "change" }, ()=> console.log(this.state.mySelection) )
         }
     }
 

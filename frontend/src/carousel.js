@@ -12,6 +12,8 @@ class ControlledCarousel extends React.Component {
         this.state = {
             index: 0,
             direction: null,
+            height: window.innerHeight,
+            width: window.innerWidth
         };
     }
 
@@ -59,19 +61,17 @@ class ControlledCarousel extends React.Component {
         activeIndex={index}
         direction={direction}
         onSelect={this.handleSelect}
+
       >
         <Carousel.Item>
           <img
             className="d-block w-100"
-            src={require("./images/nancy.jpg")}
+            src={require("./images/redlantern/6.jpg")}
+            style ={{    
+              height:this.state.height,
+              objectFit: 'cover',
+            overflow:'hidden'}}
             alt="First slide"
-          />
-        </Carousel.Item>
-        <Carousel.Item>
-          <img
-            className="d-block w-100"
-            src={require("./images/nancy2.jpg")}
-            alt="Third slide"
           />
         </Carousel.Item>
         <Carousel.Item>
@@ -79,10 +79,14 @@ class ControlledCarousel extends React.Component {
             className="d-block w-100"
             src={require("./images/pokemon.gif")}
             alt="Third slide"
+            style ={{    
+              height:this.state.height,
+              objectFit: 'cover',
+            overflow:'hidden'}}
           />
         </Carousel.Item>
       </Carousel>
-      <div style={{position: "absolute", textAlign: "center", top: "50%", left:"35%"}}> 
+      <div style={{position: "absolute", textAlign: "center", top: this.state.height/2-70, left:this.state.width/2-200}}> 
          <Button
          	    style = {{
                           width: 300,
