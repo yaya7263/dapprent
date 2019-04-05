@@ -28,12 +28,15 @@ class App extends Component {
       id: 0,
       message: null,
       intervalIsSet: false,
+      intervalIsSet2: false,
       idToDelete: null,
       idToUpdate: null,
       objectToUpdate: null,
       rentProperty:"ANaRKH",
       startDate: new Date(),
       endDate: new Date(),
+      myStart: 4202019,
+      myEnd: 4202019,
       firstName: "Spira",
       showConflict: false,
       showProcessing: false,
@@ -41,7 +44,8 @@ class App extends Component {
       processing: [],
       successful: [],
       unsuccessful: [],
-      rentMessage: "empty"
+      rentMessage: "empty",
+      currentIndex: 0
     };
     this.handleCompanySubmit = this.handleCompanySubmit.bind(this);
 
@@ -51,11 +55,10 @@ class App extends Component {
     event.preventDefault(); 
     let myProp = this.state.rentProperty
     myProp.status = 2;
-    this.setState({ processing: [...this.state.processing, myProp.location] }, () => console.log(this.state.processing)) // add location to processing 
+    this.setState({ processing: [...this.state.processing, myProp.location] }) // add location to processing 
     axios.post("http://localhost:3001/api/updateLocal", {
       update: myProp
     }).then(res => {
-      console.log(res.data)
       if (res.data.success){
         this.setState({rentMessage: "Please wait while your rent is being processed. ~15 seconds"},
           () => // brings up the modal after setting the message
@@ -85,18 +88,17 @@ class App extends Component {
    
    // this.state.processing.push(this.state.rentProperty.location)
     this.handleClose()
-    //console.log(this.state.processing[0])
     */
   }
 
 
 
   componentDidMount() {
-    console.log("Component did mount")
     this.getDataFromDb();
     if (!this.state.intervalIsSet) {
-      let interval = setInterval(this.getDataBC, 5000);
-      this.setState({ intervalIsSet: interval });
+      let interval = setInterval(this.getDataBC, 10000);
+      let interval2 = setInterval(this.getDataFromDb, 5000);
+      this.setState({ intervalIsSet: interval, intervalIsSet2: interval2 });
     }
   }
 
@@ -104,7 +106,8 @@ class App extends Component {
   componentWillUnmount() {
     if (this.state.intervalIsSet) {
       clearInterval(this.state.intervalIsSet);
-      this.setState({ intervalIsSet: null });
+      clearInterval(this.state.intervalIsSet2);
+      this.setState({ intervalIsSet: null, intervalIsSet2: null });
     }
   }
 
@@ -122,7 +125,6 @@ class App extends Component {
   }
 
   showProcessingModal = () => {
-    console.log(this.state.processing)
     return (
       <Modal style={{ top: '30%'}} show={this.state.showProcessing} onHide={()=> this.setState({showProcessing: false})} >
       <Modal.Dialog>
@@ -162,12 +164,12 @@ class App extends Component {
   }
 
   getRentals = async () => {
-    return await scFunctions.getRents();
+    return await scFunctions.getRents(this.state.currentIndex);
   } 
   getDataBC = () => {
-    console.log("updating from BC")
     this.getRentals().then(async (rentals) => {
-      var lastIndex = rentals[0].length - 1
+      var returnLength = rentals[0].length
+      this.setState({currentIndex: this.state.currentIndex + returnLength})
       for(let i = 0; i < rentals[0].length; i++){
         let currentProp = {
           status: rentals[0][i].toNumber(),
@@ -183,7 +185,9 @@ class App extends Component {
         if (currentProp.status == 1) {
           let index = this.state.processing.indexOf(currentProp.location) // check if in record books
           if (index > -1) { // not gonna do anything if not in record
-            this.setState({ processing: this.state.processing.splice(index,1)}) // remove from list so not rerun
+            console.log(this.state.processing[index])
+            console.log(index)
+            this.setState({ processing: this.state.processing.splice(index+1,1)}, ()=> console.log(this.state.processing[index])) // remove from list so not rerun
             if (this.state.company == currentProp.company) {   
               this.setState({successful: [...this.state.successful, currentProp.location]})
             }
@@ -223,7 +227,7 @@ class App extends Component {
         }
 
     //    await this.updateDB(currentProp)
-        this.getDataFromDb() 
+       // this.getDataFromDb() 
       }
     })
     
@@ -269,7 +273,6 @@ class App extends Component {
       return "rented"
   }
   handleCompanySubmit(event) {
-    console.log("company submit")
     event.preventDefault(); 
     this.setState({company: event.target.elements.company.value })
   }
@@ -282,24 +285,32 @@ class App extends Component {
     this.setState({
       startDate: date
     });
-    let datez = moment(this.state.startDate).format('MMMDDYYYY');
+    let datez = moment(date).format('MMMDDYYYY');
     datez = parseInt(MonToNum(datez)) 
-    this.state.rentProperty.start = datez
+    var rentProperty1 = {...this.state.rentProperty}
+    rentProperty1.start = datez
+    this.setState({rentProperty: rentProperty1})
   }
 
   handleEndDateChange = date => {
     this.setState({
       endDate: date
     });
-    let datez = moment(this.state.startDate).format('MMMDDYYYY');
+    let datez = moment(date).format('MMMDDYYYY');
     datez = parseInt(MonToNum(datez)) 
-    this.state.rentProperty.end = datez
+    var rentProperty1 = {...this.state.rentProperty}
+    rentProperty1.end = datez
+    this.setState({rentProperty: rentProperty1})
+  
+  }
+
+  toMonth = (myProp) =>{
 
   }
 
   renderStatusButton = property => {
     if (property.status == 1){
-      return <Button variant="danger"> Unavailable rented By Company {property.company} until {property.end} </Button>
+      return <Button variant="danger"> Unavailable rented By Company {property.company} until {MonToStr(property.end)} </Button>
     }
     else if (property.status == 2){
       return <Button variant="primary" onClick={()=>this.handleRentProperty(property)}> Processing by Rentee {property.rentee}</Button>

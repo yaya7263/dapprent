@@ -97,7 +97,7 @@ class submitProperty extends React.Component {
                         </Form.Group> 
                     </Form.Row>
                     <Form.Check type="checkbox" id="addAll" label="Add to all sites" style={{marginBottom:10}}/>
-                    <Button type="submit" variant="success">Add Property</Button>
+                    <Button type="submit" variant="success" style={{position:'relative'}}>Add Property</Button>
                 </Form> 
 		    </Container>
              )

@@ -9,7 +9,7 @@ import Web3 from 'web3';
 //const web3 = new Web3(new Web3.providers.HttpProvider(""));
 //const web3 = new Web3(new Web3.providers.HttpProvider("ropsten.infura.io/TOKEN"))
 const web3 = new Web3(window.web3.currentProvider);
-const address = '0x691830d1a1e8f043c05f641d1746d3c59326c316';
+const address = '0x37d56a7b69d752259499f01c1f36b48c63dcb547';
 
 const abi =[
 	{
@@ -235,9 +235,9 @@ const scRent = (prop, company, status) => {
 }
 
 
-const getRents = () => {
+const getRents = (myIndex) => {
 	return new Promise((resolve, reject) => {
-		contractInstance.getRecentRentals(0, (err, transactions) => {
+		contractInstance.getRecentRentals(myIndex, (err, transactions) => {
 			//  let ones = new Array(transactions).fill(0);
 			  let status = transactions[0];
 		      let location = transactions[1];

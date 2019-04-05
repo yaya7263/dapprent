@@ -60,17 +60,17 @@ class ChangeListing extends React.Component {
         
         if (event.target.checkValidity() === true) {
             console.log(myStatus)
-            axios.post("http://localhost:3001/api/changeData", {
-                update: prop
-            }).then((result) => {
-                if (myStatus == 0) {
+            if (myStatus == 1) {
+                axios.post("http://localhost:3001/api/changeData", {
+                    update: prop
+                }).then((result) => {
                     prop.status = 3
-                }
-                if (myStatus == 1){
-                    prop.status = 4
-                }
+                    scRent(prop, prop.location)
+                })
+            } 
+            else { // don't want to update the database immediately when canceling
                 scRent(prop, prop.location)
-            })
+            }
             this.setState({showModal: true})
         }
     }
@@ -155,7 +155,7 @@ class ChangeListing extends React.Component {
                 <Form noValidate validated={this.state.validated} onSubmit={e=> this.handlePropertySubmit(e)}>
                     <Form.Row>  
                         <h1 style={{marginRight:98, position:"relative", top:-3}}> {this.state.selectText} </h1> 
-                        <Form.Control as="select" onChange={this.handleSelectChange} style={{width:275}}>
+                        <Form.Control as="select" onChange={this.handleSelectChange} style={{width:275, position:'relative'}}>
                           <option value="cancelz">Cancel</option>
                           <option value="changez">Change</option>
                         </Form.Control>
@@ -226,7 +226,7 @@ class ChangeListing extends React.Component {
                             </Form.Control.Feedback>
                         </Form.Group> 
                     </Form.Row>
-                    <Button type="submit">Submit Property</Button>
+                    <Button type="submit" style={{position:'relative'}}>Submit Property</Button>
                 </Form> 
             </Container>
     )}

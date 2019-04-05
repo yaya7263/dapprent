@@ -190,7 +190,7 @@ class OwnerSubmit extends React.Component {
                             </Form.Control.Feedback>
                         </Form.Group> 
                     </Form.Row>
-                    <Button type="submit">Submit Property</Button>
+                    <Button type="submit" style={{position:'relative'}}>Submit Property</Button>
                 </Form> 
             </Container>
     )

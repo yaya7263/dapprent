@@ -2,7 +2,7 @@ import Web3 from 'web3';
 
 var web3 = new Web3(window.web3.currentProvider);
 
-const address = '0x52741cc51640d52d5b801e6e1fd5094c996f7ea5';
+const address = '0xd3b36eac53119df8421e70a894e9d522f91de1f3';
 
 const abi =[
     {
