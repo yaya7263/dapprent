@@ -40,12 +40,15 @@ class App extends Component {
       firstName: "Spira",
       showConflict: false,
       showProcessing: false,
+      searchVal: null,
+      showSearch: false, 
       lastName: "Spera",
       processing: [],
       successful: [],
       unsuccessful: [],
       rentMessage: "empty",
-      currentIndex: 0
+      currentIndex: 0,
+      searchProps: "empty"
     };
     this.handleCompanySubmit = this.handleCompanySubmit.bind(this);
 
@@ -96,7 +99,7 @@ class App extends Component {
   componentDidMount() {
     this.getDataFromDb();
     if (!this.state.intervalIsSet) {
-      let interval = setInterval(this.getDataBC, 10000);
+      let interval = setInterval(this.getDataBC, 5000);
       let interval2 = setInterval(this.getDataFromDb, 5000);
       this.setState({ intervalIsSet: interval, intervalIsSet2: interval2 });
     }
@@ -140,6 +143,81 @@ class App extends Component {
           <p>{this.state.successful}</p>
           <h1> Unsuccessful </h1> 
           <p>{this.state.unsuccessful}</p>
+        </Modal.Body>
+
+      </Modal.Dialog>
+      </Modal> )
+  }
+
+  handleSelectChange = e => {
+    this.setState({searchVal: e.target.value})
+  }
+  
+
+  handleSearch = e => {
+    e.preventDefault();
+    let myVal = this.state.searchVal
+    let searchAs = e.target.elements.searchAs.value
+    if (myVal == "owner"){
+      axios.get("http://localhost:3001/api/search",     {headers: {
+        "myoption" : myVal, 
+        "mydata" : searchAs
+      }
+      }).then( myProp=>{
+        console.log(myProp)
+      })
+
+    }
+    else if(myVal == "rentor") {
+      axios.get("http://localhost:3001/api/search",     {headers: {
+        "myoption" : myVal,
+        "mydata" : searchAs
+      }
+      }).then( myProp =>{
+        console.log(myProp)
+      })
+
+    }
+  
+    else if (myVal =="location"){
+      axios.get("http://localhost:3001/api/search",     {headers: {
+        "myoption" : myVal,
+        "mydata" : searchAs
+      }
+      }).then( myProp=> {
+        //console.log(myProp.data.data)
+        this.setState({searchProps: myProp.data.data.rentee})
+      })
+  }
+  }
+
+  showSearchModal = () => {
+    return (
+      <Modal style={{ top: '30%'}} show={this.state.showSearch} onHide={()=> this.setState({showSearch: false})} >
+      <Modal.Dialog>
+        <Modal.Header closeButton>
+          <Modal.Title>{this.state.firstName} {this.state.lastName}: </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <Form onSubmit={e=> this.handleSearch(e)}>
+            <Form.Group>
+              <Form.Label>Search by ... </Form.Label>
+              <Form.Control as="select" onChange={this.handleSelectChange}>
+                <option>...</option>
+                <option value="rentor">Rentor</option>
+                <option value="owner">Prop Owner</option>
+                <option value="location">Location</option>
+              </Form.Control>
+              <Form.Control
+                        id="searchAs"
+                        type="text"
+                        placeholder="Search as"
+              />
+              <Button type="submit" style={{position:"relative", top:10, right:-90}}> Search </Button>
+              <div style={{left:50}}> {this.state.searchProps} </div>
+            </Form.Group>
+          </Form>
         </Modal.Body>
 
       </Modal.Dialog>
@@ -424,8 +502,10 @@ class App extends Component {
     const show = this.state.show;
     return (
       <div style={{backgroundImage: 'url(' + require('./images/redlantern/5.jpg') + ')'}}>
-        <Button onClick={()=>this.setState({showProcessing: true})} style={{position: 'absolute', right:0}}> Show Record </Button>
+        <Button onClick={()=>this.setState({showProcessing: true})} style={{position: 'absolute', right:0, top: 90}}> Show Record </Button>
+        <Button onClick={()=>this.setState({showSearch: true})} style={{position: 'absolute', right:0, top:130}}> Search </Button>
         {this.showProcessingModal()}
+        {this.showSearchModal()}
         {this.showModal()} 
         {this.showConflictModal()} 
         <div style={{ padding: "10px" }}>

@@ -9,7 +9,7 @@ var cors = require('cors');
 app.use(bodyParser.json());
 
 app.use(cors({
-	'allowedHeaders': ['sessionId', 'Content-Type'],
+	'allowedHeaders': ['sessionId', "mydata", "myoption", 'Content-Type'],
 	'exposedHeaders': ['sessionId'],
 	'origin': '*',
 	'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -67,6 +67,26 @@ var abc = function () {
 //abc()
 //hello :)
 
+//search by option
+app.get('/api/search', (req, res) => {
+	let myOption = req.headers.myoption
+	let	myData = req.headers.mydata 
+	console.log(myOption)
+	console.log(myData)
+	if (myOption == "location") {
+		Property.find({location: myData}, (err, Propertys) => {
+			if(err){
+				throw err;
+			}
+			console.log(Propertys)
+			res.json({ data: Propertys[0]});
+		});
+	}
+	else {
+	return res.json({success: true})
+	}
+	
+});
 
 // finds all properties
 app.get('/api/property', (req, res) => {

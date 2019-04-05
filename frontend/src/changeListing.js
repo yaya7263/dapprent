@@ -64,12 +64,12 @@ class ChangeListing extends React.Component {
                     update: prop
                 }).then((result) => {
                     prop.status = 4
-                    scRent(prop, prop.location)
+                    scRent(prop, prop.company)
                 })
             } 
             else { // don't want to update the database immediately when canceling
                 prop.status = 3
-                scRent(prop, prop.location)
+                scRent(prop, prop.company)
             }
             this.setState({showModal: true})
         }
@@ -93,12 +93,12 @@ class ChangeListing extends React.Component {
         if (myValue == "change"){
             this.setState({selectText: "Change rent date"})
             this.setState({selection: "sdsd"})
-            this.setState({mySelection: "change" }, console.log(this.state.mySelection))
+            this.setState({mySelection: "change" })
         }
         if (myValue == "cancel"){
             this.setState({selectText: "Cancel a rent"})
             this.setState({selection: "bob"})
-            this.setState({mySelection: "cancel"  }, console.log(this.state.mySelection))
+            this.setState({mySelection: "cancel"  })
         }
     }
 
