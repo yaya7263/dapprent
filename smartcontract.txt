@@ -8,6 +8,7 @@ contract Homeaway {
     Rental[] public rentals;
     mapping (bytes32 => uint) public indexes; // this will be the index of the address
     event transactionResult (bool transaction);
+    bytes32[] public companies;
     
     uint public transactions; 
     
@@ -26,6 +27,14 @@ contract Homeaway {
         transactions = 0; 
     }
     
+    
+    function addCompany(bytes32 _company) public payable {
+        companies.push(_company);
+    }
+    
+    function retCompanies() public view returns(bytes32[] memory) {
+        return companies; 
+    }
     function rentProperty(uint _status, bytes32 _location, bytes32 _rentee, uint _price, uint _start, uint _end, bytes32 _company) public payable {
         transactions++; 
         uint currentIndex = rentals.length; 

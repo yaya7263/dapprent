@@ -20,7 +20,7 @@ Property =require('./models/property');
 Processing = require('./models/processing')
 
 //mongoose.connect('mongodb://localhost/Database', { useNewUrlParser: true })
-const uri = "mongodb+srv://Yang5297:hahaha123@homeaway-gux9g.mongodb.net/homeawayYang?retryWrites=true";
+const uri = "mongodb+srv://Yang5297:hahaha123@homeaway-gux9g.mongodb.net/airbnbYang?retryWrites=true";
 mongoose
   .connect(
     uri.toString()
@@ -64,7 +64,7 @@ var abc = function () {
 
 	}
 }
-//abc()
+abc()
 //hello :)
 
 //search by option

@@ -24,7 +24,7 @@ class App extends Component {
     this.state = {
       data: [],
       show: false, // show of the rental modal
-      company: "Homeaway", 
+      company: "Airbnb", 
       id: 0,
       message: null,
       intervalIsSet: false,
