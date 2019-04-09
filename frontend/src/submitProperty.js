@@ -1,19 +1,27 @@
 import React from "react";
 import { Container, Modal, Button, Col, Form } from 'react-bootstrap/dist/react-bootstrap.js'
 import axios from "axios";
-import { scRent } from './Components/scFunctions.js'
+import { scRent, getCompanies } from './Components/scFunctions.js'
 // help from https://react-bootstrap.github.io/components/forms/
 // THIS IS FOR ADDING A PROP
+
+const Web3 = require('web3');
+const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
 
 class submitProperty extends React.Component {
     constructor(props) {
         super(props); 
         this.state = {
             validated: false,
-            showModal: false
+            showModal: false,
+            companies: []
         }
+        this.myGetCompanies().then(comps => { this.setState({companies: comps.map(x => web3.toUtf8(x).replace(/\s+/g,''))}, () => console.log(this.state.companies))})
     }
 
+    myGetCompanies = async () => {
+        return getCompanies()
+    }
 
     handlePropertySubmit = event => {
         event.preventDefault()
