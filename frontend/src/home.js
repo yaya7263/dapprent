@@ -7,7 +7,7 @@ import OwnerSubmit from './ownerSubmit.js'
 import ChangeListing from './changeListing.js'
 import submitProperty from './submitProperty.js'
 import deleteProperty from './deleteProperty.js'
-
+import successInfo from './successInfo.js'
 function AppRouter() {
   return (
     <Router >
@@ -31,15 +31,20 @@ function AppRouter() {
         <Route exact path="/delete" component={()=>myImage("4")} />
         <Route exact path="/delete" component={NavBar} />
         <Route exact path="/delete" component={deleteProperty} />
+        <Route exact path="/successInfo" component={()=>myImage("8")} />
+        <Route exact path="/successInfo" component={NavBar} />
+        <Route exact path="/successInfo" component={successInfo} />
       </div>
     </Router>
   );
 }
-
+//       / <Route exact path="/successInfo" component={()=>myImage("3")} />
 
 
 function myImage(myValue) {
-  return (<img src={require("./images/redlantern/" + myValue + ".jpg")} style= {{position: 'absolute',  top: "0%", left:"0%", width:"100%"}} />)
+  let height = window.innerHeight
+  let width = window.innerWidth
+  return (<img src={require("./images/redlantern/" + myValue + ".jpg")} style= {{position: 'absolute',objectFit:'cover',  height: height, width:width}} />)
 }
 
 export default AppRouter;

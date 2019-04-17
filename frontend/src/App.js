@@ -7,7 +7,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import DatePicker from "react-datepicker";
 import { MonToNum, MonToStr } from './Components/monthConvert.js'
 import "react-datepicker/dist/react-datepicker.css";
-import { Jumbotron, Modal, Row, Col, Form, Container, Image,  Button, } from 'react-bootstrap/dist/react-bootstrap.js'
+import { Jumbotron, Modal, Row, Col, Form, Container, Image,  Button, Breadcrumb, BreadcrumbItem } from 'react-bootstrap/dist/react-bootstrap.js'
 import { scRent } from "./Components/scFunctions";
 
 const Web3 = require('web3');
@@ -24,7 +24,7 @@ class App extends Component {
     this.state = {
       data: [],
       show: false, // show of the rental modal
-      company: "Airbnb", 
+      company: "Vrbo", 
       id: 0,
       message: null,
       intervalIsSet: false,
@@ -48,7 +48,7 @@ class App extends Component {
       unsuccessful: [],
       rentMessage: "empty",
       currentIndex: 0,
-      searchProps: "empty"
+      searchProps: null
     };
     this.handleCompanySubmit = this.handleCompanySubmit.bind(this);
 
@@ -57,7 +57,10 @@ class App extends Component {
   handleRentSubmit = event => {
     event.preventDefault(); 
     let myProp = this.state.rentProperty
+    myProp.rentee = this.state.firstName + this.state.lastName
     myProp.status = 2;
+    myProp.thisCompany = 1;
+    myProp.success = 1;
     this.setState({ processing: [...this.state.processing, myProp.location] }) // add location to processing 
     axios.post("http://localhost:3001/api/updateLocal", {
       update: myProp
@@ -158,23 +161,39 @@ class App extends Component {
     e.preventDefault();
     let myVal = this.state.searchVal
     let searchAs = e.target.elements.searchAs.value
-    if (myVal == "owner"){
+    if (myVal == "company"){
       axios.get("http://localhost:3001/api/search",     {headers: {
         "myoption" : myVal, 
         "mydata" : searchAs
       }
       }).then( myProp=>{
-        console.log(myProp)
+      let myData = () => {
+          if (myProp.length === 0) 
+          return (
+            <Breadcrumb>
+              <BreadcrumbItem active>No Result</BreadcrumbItem>
+            </Breadcrumb>
+          )
+          else {
+          var results = myProp.map(myProp1 => <BreadcrumbItem> {myProp1.location} </BreadcrumbItem> )
+          return (    
+            <Breadcrumb>
+              {results}
+            </Breadcrumb>
+         )
+      }
+        }
+        this.setState({searchProps: myData})
       })
 
     }
-    else if(myVal == "rentor") {
+    else if(myVal == "rentee") {
       axios.get("http://localhost:3001/api/search",     {headers: {
         "myoption" : myVal,
         "mydata" : searchAs
       }
       }).then( myProp =>{
-        console.log(myProp)
+        this.setState({searchProps: myProp.data.data[0].location}, () => console.log(this.state.searchProps))
       })
 
     }
@@ -186,7 +205,7 @@ class App extends Component {
       }
       }).then( myProp=> {
         //console.log(myProp.data.data)
-        this.setState({searchProps: myProp.data.data.rentee})
+        this.setState({searchProps: myProp.data.data.rentee}, () => console.log(this.state.searchProps))
       })
   }
   }
@@ -205,8 +224,8 @@ class App extends Component {
               <Form.Label>Search by ... </Form.Label>
               <Form.Control as="select" onChange={this.handleSelectChange}>
                 <option>...</option>
-                <option value="rentor">Rentor</option>
-                <option value="owner">Prop Owner</option>
+                <option value="rentee">Rentee</option>
+                <option value="company">Company</option>
                 <option value="location">Location</option>
               </Form.Control>
               <Form.Control
@@ -256,7 +275,8 @@ class App extends Component {
           price: rentals[3][i].toNumber(),
           start: rentals[4][i].toNumber(),
           end: rentals[5][i].toNumber(),
-          help: "haha"
+          help: "haha",
+          success: 0
         }
 
         // Processing is a notification center for current component and whether or not transactions succeeded
@@ -282,9 +302,11 @@ class App extends Component {
         if (currentProp.status == 5) { //add, would only be created if not in database
           currentProp.status = 0; 
           currentProp.image  = "./images/99.jpg"
-          await axios.post("http://localhost:3001/api/property", {
+          if (currentProp.company == "All" || currentProp.company == this.state.company){
+            await axios.post("http://localhost:3001/api/property", {
             property: currentProp
-          }) 
+            }) 
+          } 
         }
         if (currentProp.status == 4) { //change
           currentProp.status = 1
@@ -299,6 +321,11 @@ class App extends Component {
           })
         }
         if (currentProp.status == 1) {
+          if (this.state.company == currentProp.company) {
+            currentProp.success = 3
+          } else {
+            currentProp.success = 2
+          }
           await axios.post("http://localhost:3001/api/updateData", {
             update: currentProp
           });
@@ -502,8 +529,7 @@ class App extends Component {
     const show = this.state.show;
     return (
       <div style={{backgroundImage: 'url(' + require('./images/redlantern/5.jpg') + ')'}}>
-        <Button onClick={()=>this.setState({showProcessing: true})} style={{position: 'absolute', right:0, top: 90}}> Show Record </Button>
-        <Button onClick={()=>this.setState({showSearch: true})} style={{position: 'absolute', right:0, top:130}}> Search </Button>
+        <Button onClick={()=>this.setState({showSearch: true})} style={{position: 'absolute', right:0, top:90}}> Search </Button>
         {this.showProcessingModal()}
         {this.showSearchModal()}
         {this.showModal()} 

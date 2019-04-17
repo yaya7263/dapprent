@@ -23,13 +23,31 @@ class submitProperty extends React.Component {
         return getCompanies()
     }
 
+    companiesList = () =>{
+        if (this.state.companies.length === 0) 
+            return (
+                <Form.Control as="select" id="companies" onClick={this.handleSelectPropChange}>
+                    <option>"Empty"</option>
+                </Form.Control>
+            )
+        else {
+            var options = this.state.companies.map(company => <option> {company} </option> )
+            return (    
+                <Form.Control as="select" id="companies">
+                    {options}
+                </Form.Control>
+           )
+        }
+    }
+
     handlePropertySubmit = event => {
         event.preventDefault()
+        console.log(event.target.elements.companies.value)
         var prop = {
             status: 0,
             location: event.target.elements.location.value,
             rentee: "empty",
-            company: "empty",
+            company: event.target.elements.companies.value,
             price: parseInt(event.target.elements.price.value,10),
             start: 0,
             end: 0,
@@ -41,14 +59,10 @@ class submitProperty extends React.Component {
         var checked = event.target.elements.addAll.checked
         this.setState({ validated: true }); 
         if (event.target.checkValidity() === true) {
-            this.setState({showMod:true})
-            axios.post("http://localhost:3001/api/property", {
-                property: prop
-            }).then(() => {
-                if(checked) {
-                    scRent(prop, prop.company, 5)
-                }
-            })
+            scRent(prop, prop.company, 5)
+            if(checked) {
+                    scRent(prop, "All", 5) // add to all sites
+            }
             this.setState({showModal: true})
         }
     }
@@ -74,37 +88,42 @@ class submitProperty extends React.Component {
                 <Form noValidate validated={this.state.validated} onSubmit={e=> this.handlePropertySubmit(e)} >
                     <Form.Row>
                         <Form.Group as={Col} md="3" style={{marginRight:50}}>
-                            <Form.Label>Owner's First Name</Form.Label>
+                            <Form.Label style={{color:'silver'}}> <b>Owner's First Name </b></Form.Label>
                             <Form.Control
                             type="text"
                             placeholder="Ludwig"
                             />
                         </Form.Group>
                         <Form.Group as={Col} md="3">
-                            <Form.Label>Last Name</Form.Label>
+                            <Form.Label style={{color:'silver'}}><b>Last Name</b></Form.Label>
                             <Form.Control
                             type="text"
                             placeholder="Wittgenstein"
                              />
                         </Form.Group>
                     </Form.Row> 
-                    <Form.Row>
-                        <Form.Group as={Col} md="7" > 
+                    <Form.Row style={{width:550}}>
+                        <Form.Group as={Col} > 
                         <Form.Control type="text" placeholder="Location" id="location" required />
                         <Form.Control.Feedback type="invalid">
                             Please enter a location.
                         </Form.Control.Feedback>
                         </Form.Group>
                     </Form.Row>
-                    <Form.Row>
-                        <Form.Group as={Col} md="7"> 
+                    <Form.Row style={{width:550}}>
+                        <Form.Group as={Col} controlId="formGridState">
+                            {this.companiesList()}
+                        </Form.Group>
+                    </Form.Row>
+                    <Form.Row md='3'>
+                        <Form.Group as={Col} md='3' > 
                         <Form.Control type="text" pattern="[0-9]*" placeholder="Price" id="price" required />
                         <Form.Control.Feedback type="invalid">
                             Please enter a price for the property. 
                         </Form.Control.Feedback>
                         </Form.Group> 
                     </Form.Row>
-                    <Form.Check type="checkbox" id="addAll" label="Add to all sites" style={{marginBottom:10}}/>
+                    <Form.Check type="checkbox" id="addAll" style={{color:'red'}} label=<b style={{color:'grey'}}>Add as same price to all sites</b> style={{marginBottom:10}}/>
                     <Button type="submit" variant="success" style={{position:'relative'}}>Add Property</Button>
                 </Form> 
 		    </Container>

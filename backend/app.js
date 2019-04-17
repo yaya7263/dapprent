@@ -53,7 +53,9 @@ var abc = function () {
 			price: prices[i],
 			start: 0,
 			end: 0,
-			image: "./images/" + i.toString() + ".jpg"
+			image: "./images/" + i.toString() + ".jpg",
+			thisCompany: 0,
+			success: 0
 		}
 
 		Property.create(prop, (err,Propertyz) => {
@@ -64,7 +66,7 @@ var abc = function () {
 
 	}
 }
-abc()
+//abc()
 //hello :)
 
 //search by option
@@ -79,11 +81,29 @@ app.get('/api/search', (req, res) => {
 				throw err;
 			}
 			console.log(Propertys)
-			res.json({ data: Propertys[0]});
+			return res.json({ data: Propertys});
+		});
+	}
+	if (myOption == "company") {
+		Property.find({company: myData}, (err, Propertys) => {
+			if(err){
+				throw err;
+			}
+			console.log(Propertys)
+			return res.json({ data: Propertys[0]});
+		});
+	}
+	if (myOption == "rentee") {
+		Property.find({rentee: myData}, (err, Propertys) => {
+			if(err){
+				throw err;
+			}
+			console.log(Propertys)
+			return res.json({ data: Propertys});
 		});
 	}
 	else {
-	return res.json({success: true})
+		return res.json({success: true})
 	}
 	
 });
@@ -118,6 +138,8 @@ app.post('/api/property', (req, res) => {
 		console.log(Propertys)
 		if (Propertys.length == 0 ) // only create if null 
 		{
+			req.body.property.success = 0
+			req.body.property.thisCompany = 0
 			Property.create(req.body.property, (err,Propertyz) => {
 				if(err){
 					throw err;
@@ -154,6 +176,18 @@ app.post('/api/changeData', (req, res) => {
 
     console.log(req.body.update.location)
     Property.findOneAndUpdate({ location: req.body.update.location }, req.body.update, err => {
+        if (err) return res.json({ success: false, error: err });
+        return res.json({ success: true })
+    });
+}
+)
+
+
+// Check for rentee is correct
+app.post('/api/changeData2', (req, res) => {
+
+    console.log(req.body.update.location)
+    Property.findOneAndUpdate({ rentee: req.body.update.rentee, location: req.body.update.location }, req.body.update, err => {
         if (err) return res.json({ success: false, error: err });
         return res.json({ success: true })
     });

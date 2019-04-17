@@ -25,7 +25,14 @@ var propertySchema = mongoose.Schema({
     },
     image:{
         type:String
+    },
+    thisCompany:{
+        type: Number
+    },
+    success:{
+        type: Number
     }
 })
-
+//this company: 1 for yes, 0 for no
+// success: 0 for unknown, 1 for processing, 2 for failure, 3 for success
 const Property = module.exports = mongoose.model("Property", propertySchema);

@@ -39,6 +39,10 @@ class NavBar extends React.Component {
           this.setState({style5: { textDecorationLine: "underline", color: "grey"}})
           this.setState(prev => ({ ownerChecked: !prev.ownerChecked, showOwner: !prev.showOwner}))
       }
+      if(this.props.location.pathname == '/successInfo') {
+        this.setState({style6: { textDecorationLine: "underline", color: "grey"}})
+        this.setState(prev => ({ ownerChecked: !prev.ownerChecked, showOwner: !prev.showOwner}))
+      }
   }
   rentEnterHandler = () => {
       this.setState({message:"Rent a property "})
@@ -90,6 +94,16 @@ class NavBar extends React.Component {
       this.setState({show:true})
   }
 
+  successEnterHandler = () => {
+    this.setState({message:"See renting results"})
+    this.setState({show:true})
+    }
+
+  successLeaveHandler = () => {
+    this.setState({message:null})
+    this.setState({show:true})
+  }
+
   render() {
     return (
       <Navbar bg="dark" variant="dark">
@@ -101,9 +115,10 @@ class NavBar extends React.Component {
           <Nav.Link href="/submitProperty" hidden={this.state.showOwner} style={this.state.style4} onMouseEnter={this.propertyEnterHandler} onMouseLeave={this.propertyLeaveHandler}> Add Property </Nav.Link>
           <Nav.Link href="/submitRent" hidden={this.state.showOwner} style={this.state.style2} onMouseEnter={this.submitEnterHandler} onMouseLeave={this.submitLeaveHandler}>Submit Renting</Nav.Link>
           <Nav.Link href="/delete" hidden={this.state.showOwner} style={this.state.style5} onMouseEnter={this.deleteEnterHandler} onMouseLeave={this.deleteLeaveHandler}>Delete Prop</Nav.Link>
+          <Nav.Link href="/successInfo" hidden={this.state.showOwner} style={this.state.style6} onMouseEnter={this.successEnterHandler} onMouseLeave={this.successLeaveHandler}>SuccessInfo</Nav.Link>
         </Nav>
         <Alert placement="bottom" variant="info" style = {{ 
-            position: "absolute", left: "700px", top: "4px",
+            position: "absolute", left: "900px", top: "4px",
             borderColor: "grey",
             borderStyle: 'solid',
             borderTopLeftRadius: 20,

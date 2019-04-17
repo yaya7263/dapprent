@@ -44,6 +44,7 @@ class ChangeListing extends React.Component {
         startDate = parseInt(MonToNum(startDate)) 
         let endDate = moment(this.state.endDate).format('MMMDDYYYY');
         endDate = parseInt(MonToNum(endDate)) 
+       // console.log(this.state.property)
         var prop = {
             status: myStatus,
             location: this.state.property,
@@ -60,7 +61,7 @@ class ChangeListing extends React.Component {
         
         if (event.target.checkValidity() === true) {
             if (myStatus == 1) { // this is for change
-                axios.post("http://localhost:3001/api/changeData", {
+                axios.post("http://localhost:3001/api/changeData2", {
                     update: prop
                 }).then((result) => {
                     prop.status = 4
