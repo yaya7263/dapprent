@@ -17,198 +17,245 @@ var web3 = window.web3;
 web3 = new Web3(web3.currentProvider);
 const abi =[
 	{
-	    "constant": false,
-	    "inputs": [
+		"constant": true,
+		"inputs": [],
+		"name": "getCompanies",
+		"outputs": [
 			{
-			    "name": "_location",
-			    "type": "bytes32"
+				"name": "",
+				"type": "bytes32[]"
 			}
-	    ],
-	    "name": "deleteRental",
-	    "outputs": [],
-	    "payable": true,
-	    "stateMutability": "payable",
-	    "type": "function"
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-	    "constant": false,
-	    "inputs": [],
-	    "name": "deleteRentals",
-	    "outputs": [],
-	    "payable": true,
-	    "stateMutability": "payable",
-	    "type": "function"
+		"constant": true,
+		"inputs": [],
+		"name": "transactions",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-	    "constant": false,
-	    "inputs": [
+		"constant": true,
+		"inputs": [
 			{
-			    "name": "_status",
-			    "type": "uint256"
-			},
-			{
-			    "name": "_location",
-			    "type": "bytes32"
-			},
-			{
-			    "name": "_rentee",
-			    "type": "bytes32"
-			},
-			{
-			    "name": "_price",
-			    "type": "uint256"
-			},
-			{
-			    "name": "_start",
-			    "type": "uint256"
-			},
-			{
-			    "name": "_end",
-			    "type": "uint256"
-			},
-			{
-			    "name": "_company",
-			    "type": "bytes32"
+				"name": "",
+				"type": "uint256"
 			}
-	    ],
-	    "name": "rentProperty",
-	    "outputs": [],
-	    "payable": true,
-	    "stateMutability": "payable",
-	    "type": "function"
+		],
+		"name": "companies",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-	    "inputs": [],
-	    "payable": false,
-	    "stateMutability": "nonpayable",
-	    "type": "constructor"
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "getRecentRentals",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256[]"
+			},
+			{
+				"name": "",
+				"type": "bytes32[]"
+			},
+			{
+				"name": "",
+				"type": "bytes32[]"
+			},
+			{
+				"name": "",
+				"type": "uint256[]"
+			},
+			{
+				"name": "",
+				"type": "uint256[]"
+			},
+			{
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-	    "anonymous": false,
-	    "inputs": [
+		"constant": false,
+		"inputs": [
 			{
-			    "indexed": false,
-			    "name": "transaction",
-			    "type": "bool"
+				"name": "_location",
+				"type": "bytes32"
 			}
-	    ],
-	    "name": "transactionResult",
-	    "type": "event"
+		],
+		"name": "deleteRental",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
 	},
 	{
-	    "constant": true,
-	    "inputs": [
+		"constant": false,
+		"inputs": [
 			{
-			    "name": "_index",
-			    "type": "uint256"
+				"name": "_company",
+				"type": "bytes32"
 			}
-	    ],
-	    "name": "getRecentRentals",
-	    "outputs": [
-			{
-			    "name": "",
-			    "type": "uint256[]"
-			},
-			{
-			    "name": "",
-			    "type": "bytes32[]"
-			},
-			{
-			    "name": "",
-			    "type": "bytes32[]"
-			},
-			{
-			    "name": "",
-			    "type": "uint256[]"
-			},
-			{
-			    "name": "",
-			    "type": "uint256[]"
-			},
-			{
-			    "name": "",
-			    "type": "uint256[]"
-			}
-	    ],
-	    "payable": false,
-	    "stateMutability": "view",
-	    "type": "function"
+		],
+		"name": "addCompany",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
 	},
 	{
-	    "constant": true,
-	    "inputs": [
+		"constant": false,
+		"inputs": [
 			{
-			    "name": "",
-			    "type": "bytes32"
-			}
-	    ],
-	    "name": "indexes",
-	    "outputs": [
+				"name": "_status",
+				"type": "uint256"
+			},
 			{
-			    "name": "",
-			    "type": "uint256"
+				"name": "_location",
+				"type": "bytes32"
+			},
+			{
+				"name": "_rentee",
+				"type": "bytes32"
+			},
+			{
+				"name": "_price",
+				"type": "uint256"
+			},
+			{
+				"name": "_start",
+				"type": "uint256"
+			},
+			{
+				"name": "_end",
+				"type": "uint256"
+			},
+			{
+				"name": "_company",
+				"type": "bytes32"
 			}
-	    ],
-	    "payable": false,
-	    "stateMutability": "view",
-	    "type": "function"
+		],
+		"name": "rentProperty",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
 	},
 	{
-	    "constant": true,
-	    "inputs": [
+		"constant": true,
+		"inputs": [
 			{
-			    "name": "",
-			    "type": "uint256"
+				"name": "",
+				"type": "uint256"
 			}
-	    ],
-	    "name": "rentals",
-	    "outputs": [
+		],
+		"name": "rentals",
+		"outputs": [
 			{
-			    "name": "status",
-			    "type": "uint256"
+				"name": "status",
+				"type": "uint256"
 			},
 			{
-			    "name": "location",
-			    "type": "bytes32"
+				"name": "location",
+				"type": "bytes32"
 			},
 			{
-			    "name": "rentee",
-			    "type": "bytes32"
+				"name": "rentee",
+				"type": "bytes32"
 			},
 			{
-			    "name": "price",
-			    "type": "uint256"
+				"name": "price",
+				"type": "uint256"
 			},
 			{
-			    "name": "start",
-			    "type": "uint256"
+				"name": "start",
+				"type": "uint256"
 			},
 			{
-			    "name": "end",
-			    "type": "uint256"
+				"name": "end",
+				"type": "uint256"
 			},
 			{
-			    "name": "company",
-			    "type": "bytes32"
+				"name": "company",
+				"type": "bytes32"
 			}
-	    ],
-	    "payable": false,
-	    "stateMutability": "view",
-	    "type": "function"
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-	    "constant": true,
-	    "inputs": [],
-	    "name": "transactions",
-	    "outputs": [
+		"constant": true,
+		"inputs": [
 			{
-			    "name": "",
-			    "type": "uint256"
+				"name": "",
+				"type": "bytes32"
 			}
-	    ],
-	    "payable": false,
-	    "stateMutability": "view",
-	    "type": "function"
+		],
+		"name": "indexes",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "deleteRentals",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "transaction",
+				"type": "bool"
+			}
+		],
+		"name": "transactionResult",
+		"type": "event"
 	}
 ]
 

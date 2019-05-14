@@ -9,101 +9,36 @@ import Web3 from 'web3';
 //const web3 = new Web3(new Web3.providers.HttpProvider(""));
 //const web3 = new Web3(new Web3.providers.HttpProvider("ropsten.infura.io/TOKEN"))
 const web3 = new Web3(window.web3.currentProvider);
-const address = '0x2260cf261723041ff8d84c458fdcfbcd1a202018';
+const address = '0x7a769d20e4dcfd3b7ec8ca6bb6347105e5c17fe7';
 
 const abi =[
 	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_company",
-				"type": "bytes32"
-			}
-		],
-		"name": "addCompany",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_location",
-				"type": "bytes32"
-			}
-		],
-		"name": "deleteRental",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": false,
+		"constant": true,
 		"inputs": [],
-		"name": "deleteRentals",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
+		"name": "getCompanies",
+		"outputs": [
 			{
-				"name": "_status",
-				"type": "uint256"
-			},
-			{
-				"name": "_location",
-				"type": "bytes32"
-			},
-			{
-				"name": "_rentee",
-				"type": "bytes32"
-			},
-			{
-				"name": "_price",
-				"type": "uint256"
-			},
-			{
-				"name": "_start",
-				"type": "uint256"
-			},
-			{
-				"name": "_end",
-				"type": "uint256"
-			},
-			{
-				"name": "_company",
-				"type": "bytes32"
+				"name": "",
+				"type": "bytes32[]"
 			}
 		],
-		"name": "rentProperty",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "constructor"
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
+		"constant": true,
+		"inputs": [],
+		"name": "transactions",
+		"outputs": [
 			{
-				"indexed": false,
-				"name": "transaction",
-				"type": "bool"
+				"name": "",
+				"type": "uint256"
 			}
 		],
-		"name": "transactionResult",
-		"type": "event"
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"constant": true,
@@ -118,20 +53,6 @@ const abi =[
 			{
 				"name": "",
 				"type": "bytes32"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getCompanies",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bytes32[]"
 			}
 		],
 		"payable": false,
@@ -178,22 +99,69 @@ const abi =[
 		"type": "function"
 	},
 	{
-		"constant": true,
+		"constant": false,
 		"inputs": [
 			{
-				"name": "",
+				"name": "_location",
 				"type": "bytes32"
 			}
 		],
-		"name": "indexes",
-		"outputs": [
+		"name": "deleteRental",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
 			{
-				"name": "",
-				"type": "uint256"
+				"name": "_company",
+				"type": "bytes32"
 			}
 		],
-		"payable": false,
-		"stateMutability": "view",
+		"name": "addCompany",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_status",
+				"type": "uint256"
+			},
+			{
+				"name": "_location",
+				"type": "bytes32"
+			},
+			{
+				"name": "_rentee",
+				"type": "bytes32"
+			},
+			{
+				"name": "_price",
+				"type": "uint256"
+			},
+			{
+				"name": "_start",
+				"type": "uint256"
+			},
+			{
+				"name": "_end",
+				"type": "uint256"
+			},
+			{
+				"name": "_company",
+				"type": "bytes32"
+			}
+		],
+		"name": "rentProperty",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -241,8 +209,13 @@ const abi =[
 	},
 	{
 		"constant": true,
-		"inputs": [],
-		"name": "transactions",
+		"inputs": [
+			{
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"name": "indexes",
 		"outputs": [
 			{
 				"name": "",
@@ -252,6 +225,33 @@ const abi =[
 		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "deleteRentals",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "transaction",
+				"type": "bool"
+			}
+		],
+		"name": "transactionResult",
+		"type": "event"
 	}
 ]
 
